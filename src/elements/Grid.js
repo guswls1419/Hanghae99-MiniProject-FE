@@ -2,7 +2,9 @@ import React from "react";
 import styled from "styled-components"
 
 const Grid = (props) => {
-    const {is_flex,
+    const {
+        is_flex,
+        height,
         width,
         margin,
         padding,
@@ -14,6 +16,7 @@ const Grid = (props) => {
     //props로 설정해준 값 가져오기
 
     const styles = {
+        height:height,
         is_flex : is_flex,
         width : width,
         margin : margin,
@@ -41,12 +44,13 @@ Grid.defaultProps = {
     bg :false,
     center:false,
     border_radius:false,
-    _onClick:() => {}
+    _onClick:() => {},
+    height:"30px",
 }
 
 const GridBox = styled.div`
     width : ${(props) => props.width};
-    height : 100%;
+    height : ${(props) => props.height};
     box-sizing :border-box;
     ${(props) => props.padding ? `padding : ${props.padding};` : ""};
     ${(props) => props.margin ? `margin : ${props.margin};` : ""};

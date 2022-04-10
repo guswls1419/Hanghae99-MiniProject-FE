@@ -40,7 +40,9 @@ const ImageDefault = styled.div`
 `;
 
 const AspectOutter = styled.div`
-    width : 100%;
+    --size: ${(props) => props.size}px;  /* css변수사용법*/ 
+    width : var(--size);
+    height : var(--size);
     min-width : 250px;
 `;
 
