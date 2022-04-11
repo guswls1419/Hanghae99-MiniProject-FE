@@ -4,8 +4,31 @@ import PostList from "./PostList";
 import { Input, Grid,Button,Text} from "../elements";
 import { keyframes } from "styled-components";
 import Logo from "../shared/logo.png"
+import { useDispatch, } from "react-redux";
+import { emailCheck } from "../shared/common";
+import {actionCreators as userActions} from "../redux/modules/user";
 
 const Login =(props)=>{
+    const dispatch=useDispatch();
+    const [user_name,setUserName]=React.useState('');
+    const [pwd,setPwd]=React.useState('');
+    const [email_check,setEmailCheck]=React.useState(false);
+    const userNameCheck =(e)=>{
+    if(!emailCheck(e.target.value)){
+        setEmailCheck(false)
+        return;
+    }else{
+        setEmailCheck(true)
+    }
+    setUserName(e.target.value);
+}
+    const login=()=>{
+        if(user_name ==="" || pwd ===""){
+            window.alert("아이디와 비밀번호를 입력해주세요");
+            return ;
+        }
+        dispatch(userActions.loginFB(user_name,pwd));
+    }
     return(
         <React.Fragment>
             <PostList/>
@@ -14,15 +37,19 @@ const Login =(props)=>{
                     <img src={Logo} width="50px" style={{margin:"10px 50% auto", transform:"translateX(-50%)"}}/>
                 </Grid>
                 <Grid padding="20px" margin="30px 0px 0px 0px">
-                    <Input placeholder="아이디를 입력해주세요"></Input>
+                    <Input  _onChange ={userNameCheck} placeholder="아이디를 입력해주세요" ></Input>
                 </Grid>
-                <Grid padding="20px" margin="10px 0px 0px 0px">
-                    <Input placeholder="비밀번호를 입력해주세요"></Input>
+                <Grid  padding="20px" margin="0px 0px 0px 5px">
+                    <IdCheck2>{email_check ?"사용가능한 형식입니다":""}</IdCheck2>
+                    <IdCheck>{email_check ?"":"이메일형식에 맞지 않습니다"}</IdCheck>
+                </Grid>
+                <Grid padding="20px" margin="0px 0px 0px 0px">
+                    <Input  _onChange ={(e)=>{setPwd(e.target.value);}} placeholder="비밀번호를 입력해주세요" value={pwd}  type="password"></Input>
                 </Grid>
                 <Grid padding="20px" margin="10px 0px">
-                    <Button>로그인하기</Button>
+                    <Button _onClick={login}>로그인하기</Button>
                 </Grid>
-                <Grid padding="20px" margin="30px 0px">
+                <Grid padding="20px" margin="0px 0px">
                     <p style={{textAlign:"center"}}>소셜 로그인</p>
                 </Grid>
                 <Grid padding="20px" margin="10px 0px">
@@ -36,7 +63,14 @@ const Login =(props)=>{
     )
 }
 
-
+const IdCheck=styled.p`
+font-size:12px;
+color:#fa8072;
+`
+const IdCheck2=styled.p`
+font-size:12px;
+color:#03ac13;
+`
 const ModalWrap=styled.div`
 margin:0 auto;
 width:100%;

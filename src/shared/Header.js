@@ -3,8 +3,10 @@ import styled from "styled-components";
 import { Grid,Button,Text } from "../elements";
 import {useMediaQuery} from "react-responsive";
 import Logo from "./logo.png"
+import { useSelector } from "react-redux";
 
 const Header =(props)=>{
+    const nick_name =useSelector((state)=>state.user.nick_name);
     const isPc = useMediaQuery ({
         query : "(min-width : 1024px) and (max-width :1920px)"
         });
@@ -19,7 +21,7 @@ const Header =(props)=>{
                     </Grid>
                     <Grid width="700px" is_flex>
                         <Grid margin="60px 0px 0px 0px">
-                            {isPc && <Text>권해원님 환영합니다</Text>}
+                            {isPc && <Text>{nick_name}님 환영합니다</Text>}
                         </Grid>
                         <Grid margin="45px 0px 0px 0px" is_flex>
                             <Button width="100px" margin="0 10px 0 0">마이버킷</Button>
