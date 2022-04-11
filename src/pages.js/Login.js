@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import PostList from "./PostList";
-import { Input, Grid,Button,Text} from "../elements";
+import { Input, Grid,Button} from "../elements";
 import { keyframes } from "styled-components";
 import Logo from "../shared/logo.png"
 import { useDispatch, } from "react-redux";
@@ -41,7 +41,7 @@ const Login =(props)=>{
                 </Grid>
                 <Grid  padding="20px" margin="0px 0px 0px 5px">
                     <IdCheck2>{email_check ?"사용가능한 형식입니다":""}</IdCheck2>
-                    <IdCheck>{email_check ?"":"이메일형식에 맞지 않습니다"}</IdCheck>
+                    <IdCheck>{email_check ?"":"이메일형식으로 입력해주세요"}</IdCheck>
                 </Grid>
                 <Grid padding="20px" margin="0px 0px 0px 0px">
                     <Input  _onChange ={(e)=>{setPwd(e.target.value);}} placeholder="비밀번호를 입력해주세요" value={pwd}  type="password"></Input>

@@ -23,22 +23,13 @@ const BucketDetail =(props)=>{
     const comment_cont = (e) =>{
         setComments(e.target.value);
     }
-   
-
     const bucket_list = useSelector((state)=>state.bucket.list);
-    //console.log(bucket_list)
-   
+
      const dispatch = useDispatch();
-   
      const {bucket} = props;
-   
      React.useEffect(() => {
        dispatch(bucketAction.LodeBucketDB(bucket));
      },[]);
-   
-
-
-
     return(
         <>
           <WriteWrap>
