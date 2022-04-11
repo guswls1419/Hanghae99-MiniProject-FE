@@ -24,7 +24,7 @@ const BucketDetail =(props)=>{
         setComments(e.target.value);
     }
     const bucket_list = useSelector((state)=>state.bucket.list);
-    console.log(bucket_list)
+
      const dispatch = useDispatch();
      const {bucket} = props;
      React.useEffect(() => {
