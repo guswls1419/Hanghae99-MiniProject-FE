@@ -5,12 +5,9 @@ import Logut from "../shared/update.png"
 import { useHistory } from "react-router-dom";
 
 const CommentItem =(props)=>{
-
     const history = useHistory();
-
     const editComment=()=>{
         history.push('/edit/:id')
-        
     }
     return(
         <React.Fragment>

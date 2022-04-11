@@ -1,11 +1,21 @@
 import React from "react";
 import {Grid,Image,Text} from "../elements";
 import styled from "styled-components";
+import { useDispatch } from "react-redux";
+import {actionCreators as BucketAction} from "../redux/modules/bucket";
 
 const Post =(props)=>{
+    const dispatch = useDispatch();
+    React.useEffect(()=>{
+    dispatch(BucketAction.LodeBucketDB());
+  },[]);
+
+
+
+    console.log(props)
     return(
         <React.Fragment>
-                <Box src={props.url}>
+                <Box src={props.imageUrl}>
                 <Grid padding="20px">
                         <Grid>
                             <div style={{float:"right", display:"flex"}}>
@@ -13,8 +23,10 @@ const Post =(props)=>{
                                 <div>💬{props.comment_cnt}</div>
                             </div>
                         </Grid>
-                        <Grid margin="240px 0px 0px 0px">
-                            <Text bold color="white" size="16px">{props.contents}</Text>
+                        <Grid margin="220px 0px 0px 0px">
+                            <TitleText>
+                                {props.title}
+                            </TitleText>
                         </Grid>
                     </Grid>
                 </Box>
@@ -23,11 +35,20 @@ const Post =(props)=>{
 }
 Post.defaultProps={
     url:"http://th1.tmon.kr/thumbs/image/f9f/661/078/258e751b2_700x700_95_FIT.jpg",
-    contents:"권해원님의 버킷리스트 텍스트는 최대 두줄까지 가능합니다",
+    contents:"권해원님의 버킷리스트 텍스트는 최대 세줄까지 가능합니다",
     like_cnt:0,
     comment_cnt:0,
 }
-
+const TitleText=styled.div`
+width:100%;
+height:63px;
+font-size:16px;
+color:white;
+overflow:hidden;
+text-overflow:ellipsis;
+white-space:initial;
+font-weight:600;
+`
 const Box=styled.div`
 border-radius:10px;
 min-width:270px;

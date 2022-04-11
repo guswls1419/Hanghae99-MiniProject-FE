@@ -3,7 +3,7 @@
         {
             "title": "제목입니다",
             "imageUrl":"/images/cancle.png",
-             "todolist":[{
+            "todolist":[{
             "content": "반가워요",
             "done" : 0
               }]
