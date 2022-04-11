@@ -2,9 +2,54 @@ import React from "react";
 import styled from "styled-components";
 import PostList from "./PostList";
 import { Input, Grid,Button,Text} from "../elements";
+import { useDispatch } from "react-redux";
 import Logo from "../shared/logo.png"
+import { emailCheck } from "../shared/common";
+import { actionCreators as userActions } from "../redux/modules/user";
+
 
 const Signup =(props)=>{
+    const dispatch=useDispatch();
+    const [user_name,setUserName]=React.useState('');
+    const [pwd,setPwd]=React.useState('');
+    const [nick_name,setNickName]=React.useState('');
+    const [pwd_check,setPwdCheck]=React.useState('');
+    const [email_check,setEmailCheck]=React.useState(false);
+    const usernameCheck =(e)=>{
+        if(!emailCheck(e.target.value)){
+            setEmailCheck(false)
+            return;
+        }else{
+            setEmailCheck(true)
+        }
+        setUserName(e.target.value);
+    }
+    const idDupCheck =()=>{
+        if(user_name===""){
+            window.alert("아이디를 입력해주세요")
+            return;
+        }
+        dispatch(userActions.usernameDupCheckFB(user_name))
+    }
+    const nicknameDupCheck =()=>{
+        if(nick_name===""){
+            window.alert("닉네임을 입력해주세요")
+            return;
+        }
+        dispatch(userActions.nicknameDupCheckFB(nick_name))
+    }
+    const signup=()=>{
+        if(pwd ==""){
+            window.alert("비밀번호를 입력해주세요")
+            return;
+        }
+        if(pwd!==pwd_check){
+            window.alert("비밀번호가 일치하지 않습니다")
+            return;
+        }
+        dispatch(userActions.signupFB(nick_name,pwd,user_name,pwd_check));
+    };
+
     return(
         <React.Fragment>
             <Modal>
@@ -12,21 +57,25 @@ const Signup =(props)=>{
                 <img src={Logo} width="50px" style={{margin:"10px 50% auto", transform:"translateX(-50%)"}}/>
                 </Grid>
                 <Grid padding="20px" margin="50px 0px 0px 0px" is_flex>
-                    <Input placeholder="아이디를 입력해주세요"></Input>
-                    <Button width="80px" margin="12px 0px 0px 0px" backgroundColor="#949494">중복확인</Button>
+                    <Input _onChange ={usernameCheck} placeholder="아이디를 입력해주세요"></Input>
+                    <Button width="80px" margin="12px 0px 0px 0px" backgroundColor="#949494" _onClick={idDupCheck}>중복확인</Button>
+                </Grid>
+                <Grid  padding="20px" margin="-20px 0px 0px 5px">
+                    <IdCheck2>{email_check ?"사용가능한 형식입니다":""}</IdCheck2>
+                    <IdCheck>{email_check ?"":"이메일형식에 맞지 않습니다"}</IdCheck>
                 </Grid>
                 <Grid padding="20px" margin="10px 0px 0px 0px" is_flex>
-                    <Input placeholder="닉네임을 입력해주세요"></Input>
-                    <Button width="80px" margin="11px 0px 0px 0px" backgroundColor="#949494">중복확인</Button>
+                    <Input _onChange ={(e)=>{setNickName(e.target.value);}} placeholder="닉네임을 입력해주세요"></Input>
+                    <Button width="80px" margin="11px 0px 0px 0px" backgroundColor="#949494" _onClick={nicknameDupCheck}>중복확인</Button>
                 </Grid>
                 <Grid padding="20px" margin="0px 0px 0px 0px">
-                    <Input placeholder="비밀번호를 입력해주세요"></Input>
+                    <Input type="password" _onChange ={(e)=>{setPwd(e.target.value);}} placeholder="비밀번호를 입력해주세요"></Input>
                 </Grid>
                 <Grid padding="20px" margin="10px 0px 0px 0px">
-                    <Input placeholder="비밀번호를 다시 입력해주세요"></Input>
+                    <Input type="password" _onChange ={(e)=>{setPwdCheck(e.target.value);}} placeholder="비밀번호를 다시 입력해주세요"></Input>
                 </Grid>
-                <Grid padding="20px" margin="40px 0px 0px 0px">
-                    <Button backgroundColor="#F5C820" color="black">회원가입하기</Button>
+                <Grid padding="20px" margin="20px 0px 0px 0px">
+                    <Button backgroundColor="#F5C820" color="black" _onClick={signup}>회원가입하기</Button>
                 </Grid>
                 <Grid padding="20px" margin="10px 0px 0px 0px">
                     <Button is_outlined backgroundColor="white" color="black">이미 회원이신가요? 로그인하기</Button>
@@ -37,7 +86,14 @@ const Signup =(props)=>{
     )
 }
 
-
+const IdCheck=styled.p`
+font-size:12px;
+color:#fa8072;
+`
+const IdCheck2=styled.p`
+font-size:12px;
+color:#03ac13;
+`
 
 const Modal =styled.div`
 max-width:450px;
