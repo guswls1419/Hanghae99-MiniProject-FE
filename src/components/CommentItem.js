@@ -2,11 +2,15 @@ import React from "react";
 import styled from "styled-components";
 import {Grid,Text,Button} from "../elements";
 import Logut from "../shared/update.png"
+import { useHistory } from "react-router-dom";
 
 const CommentItem =(props)=>{
 
+    const history = useHistory();
+
     const editComment=()=>{
-        console.log("댓글을 수정할래요")
+        history.push('/edit/:id')
+        
     }
     return(
         <React.Fragment>
@@ -39,17 +43,17 @@ const CommentBox=styled.div`
 width:100%;
 padding:10px;
 box-sizing:border-box;
-border-bottom:1px solid #d3d3d3;
-`
+//border-bottom:1px solid #d3d3d3;
+`;
 const SubContents=styled.div`
 width:100%;
 font-size:12px;
 float:left;
-`
+`;
 const Comments=styled.div`
 width:100%;
 font-size:14px;
-float:left:
-`
+float:left;
+`;
 
 export default CommentItem;

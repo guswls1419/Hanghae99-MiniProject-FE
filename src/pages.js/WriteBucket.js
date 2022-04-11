@@ -4,9 +4,39 @@ import {Grid, Image, Text, Button, Input} from "../elements";
 import Upload from '../shared/Upload';
 import BuckItem from "../components/BucketItem";
 import styled from 'styled-components';
-
+import { useDispatch } from 'react-redux'; 
+import { actionCreators as bucketAction } from "../redux/modules/bucket";
+import { useHistory } from "react-router-dom";
 
 export const WriteBucket = () => {
+
+  const history = useHistory();
+
+  const dispatch = useDispatch();
+
+    const [name,setName] = React.useState();
+    const [bucket,setBucket] = React.useState();
+
+    console.log(name)
+    console.log(bucket)
+
+    const bucketName = (e) =>{
+        setName(e.target.value);
+    }
+    const buckets = (e) =>{
+        setBucket(e.target.value);
+    }
+
+    const write = () => {
+        dispatch(bucketAction.createBucket({
+            imageUrl: "https://cdn4.vectorstock.com/i/1000x1000/76/73/red-delete-button-vector-9627673.jpg",
+            title: name,
+            todolist:[{content: bucket, done : 0}]
+        }))
+
+        history.push('/bucket/:id')
+    }
+
     return (
         <React.Fragment>
           <WriteWrap>
@@ -16,14 +46,14 @@ export const WriteBucket = () => {
             </Grid>
             <div style={{width:"100%",height:"300px",backgroundColor:"grey"}}/>
             <Grid margin="30px 0px 0px 0px">
-              <Text bold>2.버킷리스트 미리보기 이미지를 등록해주세요.</Text>
+              <Text bold>2.버킷리스트 이름을 등록해주세요.</Text>
             </Grid>
-            <Input placeholder="김버킷의 버킷리스트"/>
+            <Input placeholder="김버킷의 버킷리스트"  _onChange={bucketName}/>
 
             <Grid margin="50px 0px">
               <Text bold>3.버킷리스트 항목을 추가해보세요.</Text>
             <Grid>
-              <Input placeholder="ex.혼자서 한라산 등반하기"></Input>
+              <Input placeholder="ex.혼자서 한라산 등반하기" _onChange={buckets}></Input>
             <Grid margin="20px 0px 0px 0px">
                     <Button backgroundColor="#F5C820" color="black">추가하기</Button>
                   </Grid>
@@ -40,7 +70,7 @@ export const WriteBucket = () => {
                 
                 
                 </Grid>
-                <SaveBtn>저장하기</SaveBtn>
+                <SaveBtn onClick={write}>저장하기</SaveBtn>
           </WriteWrap>
         </React.Fragment>
     )

@@ -5,8 +5,25 @@ import Upload from "../shared/Upload";
 import BuckItem from "../components/BucketItem";
 import ProgressBar from "../components/ProgressBar";
 import CommentItem from "../components/CommentItem";
+import { useHistory } from "react-router-dom";
+
+
 
 const BucketDetail =(props)=>{
+
+    const history = useHistory();
+
+    const editWrite = () => {
+        history.push('/write')
+    }
+
+    const [comments,setComments] = React.useState();
+
+    const comment_cont = (e) =>{
+        setComments(e.target.value);
+    }
+    console.log(comments)
+
     return(
         <>
           <WriteWrap>
@@ -28,8 +45,9 @@ const BucketDetail =(props)=>{
                     <div>💬{props.comment_cnt}</div>
                 </div>
                 </Grid>
-                <Grid margin="0px 0px 0px 0px">
-                    <Input/>
+                <Grid is_flex margin="0px 0px 0px 0px">
+                    <Input _onChange={comment_cont}/>
+                    <Button width="60px" color="#fff" margin='10px 0px 0px 0px'>입력</Button>
                 </Grid>
                 <Grid  margin="20px 0px 0px 0px">
                     <CommentItem/>
@@ -40,7 +58,7 @@ const BucketDetail =(props)=>{
                   {/* 밑의 버튼이랑 사이 간격이니 꼭 유지해주세요 */}
                 </Grid> 
           </WriteWrap>
-          <FloatButton><p style={{fontSize:"20px"}}>✏️</p></FloatButton>
+          <FloatButton><p style={{fontSize:"20px"}} onClick={editWrite}>✏️</p></FloatButton>
           </>
     )
 }

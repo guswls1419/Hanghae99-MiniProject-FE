@@ -1,6 +1,8 @@
 import './App.css';
 import PostList from '../pages.js/PostList';
 import {BrowserRouter, Route} from "react-router-dom";
+import { ConnectedRouter } from 'connected-react-router';
+import { history } from '../redux/configstore';
 import Header from './Header';
 import Login from '../pages.js/Login';
 import Signup from '../pages.js/Signup';
@@ -12,7 +14,7 @@ import EditComment from '../pages.js/EditComment';
 function App() {
   return (
     <AppWrap>
-      <BrowserRouter>
+      <ConnectedRouter history={history}>
       <Header/>
 
         <Route path="/" exact>
@@ -36,7 +38,7 @@ function App() {
 
         <Route path="/write" exact component={WriteBucket}/>
         <Route path="/bucket/:id" exact component={BucketDetail}/>
-      </BrowserRouter> 
+      </ConnectedRouter>
     </AppWrap>
   );
 }

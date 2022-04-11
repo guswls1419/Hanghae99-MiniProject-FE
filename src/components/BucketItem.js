@@ -2,8 +2,31 @@ import React from 'react'
 import {Grid, Image, Text, Button, Input} from "../elements";
 import styled from 'styled-components';
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+import { actionCreators as bucketAction } from "../redux/modules/bucket";
 
 function BuckItem(props) {
+  // const bucket_list = useSelector((state)=>state.bucket.list);
+  // const bucket = bucket_list.todolist[0].content
+  // console.log(bucket)
+  // const bucket_list = useSelector((state)=>state.bucket.list);
+  // const buckets = bucket_list[0].todolist[0].content
+  //console.log(buckets)
+
+
+  // const dispatch = useDispatch();
+
+  // const {bucket} = props;
+
+  // React.useEffect(() => {
+  //   dispatch(bucketAction.LodeBucketDB(bucket));
+  // },[]);
+
+
+
+
+
   const {state} = props;
   const [checkState, setCheckState] = useState(false);
   const complete=()=>{
