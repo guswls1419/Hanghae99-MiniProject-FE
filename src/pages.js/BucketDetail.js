@@ -6,7 +6,8 @@ import BuckItem from "../components/BucketItem";
 import ProgressBar from "../components/ProgressBar";
 import CommentItem from "../components/CommentItem";
 import { useHistory } from "react-router-dom";
-
+import { useSelector, useDispatch } from "react-redux";
+import { actionCreators as bucketAction } from "../redux/modules/bucket";
 
 
 const BucketDetail =(props)=>{
@@ -22,7 +23,21 @@ const BucketDetail =(props)=>{
     const comment_cont = (e) =>{
         setComments(e.target.value);
     }
-    console.log(comments)
+   
+
+    const bucket_list = useSelector((state)=>state.bucket.list);
+    console.log(bucket_list)
+   
+     const dispatch = useDispatch();
+   
+     const {bucket} = props;
+   
+     React.useEffect(() => {
+       dispatch(bucketAction.LodeBucketDB(bucket));
+     },[]);
+   
+
+
 
     return(
         <>
@@ -34,10 +49,13 @@ const BucketDetail =(props)=>{
             </Grid>
             </Grid>
                 <Grid margin="80px 0px 0px 0px">
-                  <BuckItem/>
-                  <BuckItem/>
-                  <BuckItem/>
-                  <BuckItem/>
+                  {
+                    bucket_list.map((a,i) => {
+                      return(
+                        <BuckItem key={a} {...a}/>
+                        )
+                    })
+                  } 
                 </Grid>
                 <Grid margin="220px 0px 0px 0px">
                 <div style={{float:"left", display:"flex"}}>

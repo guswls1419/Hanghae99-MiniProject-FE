@@ -4,38 +4,57 @@ import {Grid, Image, Text, Button, Input} from "../elements";
 import Upload from '../shared/Upload';
 import BuckItem from "../components/BucketItem";
 import styled from 'styled-components';
-import { useDispatch } from 'react-redux'; 
+import { useDispatch,useSelector } from 'react-redux'; 
 import { actionCreators as bucketAction } from "../redux/modules/bucket";
 import { useHistory } from "react-router-dom";
 
-export const WriteBucket = () => {
+export const WriteBucket = (props) => {
 
   const history = useHistory();
-
   const dispatch = useDispatch();
 
     const [name,setName] = React.useState();
-    const [bucket,setBucket] = React.useState();
+    const [bk_list,setBk_list] = React.useState();
 
-    console.log(name)
-    console.log(bucket)
+    //console.log(name)
+   // console.log(bk_list)
 
+    //인풋함수
     const bucketName = (e) =>{
         setName(e.target.value);
     }
     const buckets = (e) =>{
-        setBucket(e.target.value);
+      setBk_list(e.target.value);
     }
 
+    //버튼 함수
+    const add = () => {
+      dispatch(bucketAction.addBucket(bk_list))
+    }
     const write = () => {
         dispatch(bucketAction.createBucket({
             imageUrl: "https://cdn4.vectorstock.com/i/1000x1000/76/73/red-delete-button-vector-9627673.jpg",
             title: name,
-            todolist:[{content: bucket, done : 0}]
+            todolist:[{content: bk_list, done : 0}]
         }))
 
-        history.push('/bucket/:id')
+        // history.push('/bucket/:id')
     }
+
+   
+const bucket_list = useSelector((state)=>state.bucket.list);
+ 
+ console.log(bucket_list)
+
+  // const dispatch = useDispatch();
+
+  const {bucket} = props;
+
+  React.useEffect(() => {
+    dispatch(bucketAction.LodeBucketDB());
+  },[]);
+
+
 
     return (
         <React.Fragment>
@@ -55,15 +74,18 @@ export const WriteBucket = () => {
             <Grid>
               <Input placeholder="ex.혼자서 한라산 등반하기" _onChange={buckets}></Input>
             <Grid margin="20px 0px 0px 0px">
-                    <Button backgroundColor="#F5C820" color="black">추가하기</Button>
+                    <Button backgroundColor="#F5C820" color="black" _onClick={add}>추가하기</Button>
                   </Grid>
                 </Grid>
                 <Grid margin="80px 0px 0px 0px">
-                  <BuckItem state="is_edit"/>
-                  <BuckItem state="is_edit"/>
-                  <BuckItem state="is_edit"/>
-                  <BuckItem state="is_edit"/>
-                  <BuckItem state="is_edit"/>
+                {
+                    bucket_list.map((a,i) => {
+                      return(
+                        <BuckItem state="is_edit" key={i} {...a} />
+                        )
+                   })
+                }  
+                  
                   <Grid margin="80px 0px 0px 0px"/>
                   {/* 밑의 버튼이랑 사이 간격이니 꼭 유지해주세요 */}
                 </Grid>
@@ -75,6 +97,7 @@ export const WriteBucket = () => {
         </React.Fragment>
     )
 }
+
 
 const WriteWrap=styled.div`
 margin:0 auto;

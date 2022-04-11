@@ -1,0 +1,74 @@
+{
+    "bucket": [
+        {
+            "title": "제목입니다",
+            "imageUrl":"/images/cancle.png",
+             "todolist":[{
+            "content": "반가워요",
+            "done" : 0
+              }]
+        },
+        {
+            "title": "111제목입니다",
+            "imageUrl":"/images/cancle.png",
+             "todolist":[{
+            "content": "반가워요1111",
+            "done" : 0
+              }]
+        },
+        {
+            "title": "222제목입니다",
+            "imageUrl":"/images/cancle.png",
+             "todolist":[{
+            "content": "반가워요22222",
+            "done" : 0
+              }]
+        },
+        {
+            "title": "333제목입니다",
+            "imageUrl":"/images/cancle.png",
+             "todolist":[{
+            "content": "반가워요3333",
+            "done" : 0
+              }]
+        },
+        {
+            "title": "444제목입니다",
+            "imageUrl":"/images/cancle.png",
+             "todolist":[{
+            "content": "반가워요44444",
+            "done" : 0
+              }]
+        }
+    ],
+
+    "toggle": [
+        {
+            "result" : false
+        }
+    ],
+
+    "bucket_list": [
+        {
+                "postId": 1,
+                "title": "제목입니다",
+                "imageUrl":"/images/cancle.png",
+                "likesNum" : 2,
+                "comments" : 4
+            },
+            {
+                "postId": 2,
+                "title": "타이틀입니다",
+                "imageUrl":"/images/cancle.png",
+                "likesNum" : 3,
+                "comments" : 7
+            },
+            {
+                "postId": 1,
+                "title": "text입니다",
+                "imageUrl":"/images/cancle.png",
+                "likesNum" : 3,
+                "comments" : 5
+            }
+    ]
+  }
