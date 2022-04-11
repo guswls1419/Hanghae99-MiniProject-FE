@@ -26,7 +26,7 @@ const BucketDetail =(props)=>{
    
 
     const bucket_list = useSelector((state)=>state.bucket.list);
-    console.log(bucket_list)
+    //console.log(bucket_list)
    
      const dispatch = useDispatch();
    

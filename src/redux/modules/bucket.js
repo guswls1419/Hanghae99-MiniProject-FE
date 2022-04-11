@@ -11,6 +11,8 @@ const LODE_BUCKET = "LODE_BUCKET";
 const UPLODE_BUCKET = "UPLODE_BUCKET";
 const DELETE_BUCKET = "DELETE_BUCKET";
 
+const PG_UPDATE_BUCKET = "PG_UPDATE_BUCKET";
+
 // *** 액션 생성 함수
 const createBucket = createAction(CREATE_BUCKET,(bucket) => ({bucket}));
 const addBucket = createAction(ADD_BUCKET,(bucket) => ({bucket}));
@@ -18,13 +20,18 @@ const lodeBucket = createAction(LODE_BUCKET,(bucket_list) => ({bucket_list}));
 const uplodeBucket = createAction(UPLODE_BUCKET,(bucket_id,bucket) => ({bucket_id,bucket})); 
 const deldteBucket = createAction(DELETE_BUCKET,(bucket_id) => ({bucket_id})); 
 
+const PG_updateBucket = createAction(PG_UPDATE_BUCKET,(bucket_idx) => ({bucket_idx})); 
+
+
 
 
 // *** 초기값
 const initialState = {
-    list:[{title: "제목입니다",
+    list:[{
+    id : 1,
+    title: "제목입니다",
     imageUrl:"/images/cancle.png",
-    todolist:[{content: "반가워요", done : 0}]}]
+    todolist:[{ id : 1, content: "반가워요", done : 0}]}]
 }
 
 // const initialPost = {
@@ -35,9 +42,9 @@ const initialState = {
 
 // *** 미들웨어
 const LodeBucketDB = () => {
-  return function (dispatch, getState, { history }) {
-       axios
-        .get("http://localhost:3001/bucket")
+  return async function (dispatch, getState, { history }) {
+    await axios
+        .get("http://denia-wwdt.shop/api/posts")
         .then((result) => {
           console.log(result.data)
           dispatch(lodeBucket(result.data))
@@ -56,7 +63,7 @@ export default handleActions(
     //console.log(draft.list)
   }), 
   [ADD_BUCKET] : (state, action) => produce(state, (draft) => {
-    draft.data=action.payload.bucket
+    draft.list=action.payload.bucket
    //  console.log()
   }), 
   [LODE_BUCKET] : (state, action) => produce(state, (draft) => {
@@ -69,6 +76,19 @@ export default handleActions(
   [DELETE_BUCKET] : (state, action) => produce(state, (draft) => {
       
   }),
+  [PG_UPDATE_BUCKET] : (state, action) => produce(state, (draft) => {
+ const bk_idxd =action.payload.bucket_idx.id
+  const bk_todolist = action.payload.bucket_idx.todolist[0]
+  //draft.list[bk_idxd] = {...bk_todolist, done : 1 }
+
+//   if(  draft.list[bk_idxd] = bk_todolist.done === 0 ){
+//     return{ ...bk_todolist, done : 1 }} 
+//  else {return {...bk_todolist, done : 0 }}
+
+  console.log(bk_todolist.done)
+  console.log(draft.list[bk_idxd])
+     
+  }),
   }, initialState
 );
 
@@ -79,6 +99,7 @@ const actionCreators = {
   uplodeBucket,
   deldteBucket,
   LodeBucketDB,
+  PG_updateBucket,
 
 }
 
