@@ -7,23 +7,10 @@ import axios from 'axios';
 import { actionCreators as bucketAction } from "../redux/modules/bucket";
 
 function BuckItem(props) {
-  // const bucket_list = useSelector((state)=>state.bucket.list);
-  // const bucket = bucket_list.todolist[0].content
-  // console.log(bucket)
-  // const bucket_list = useSelector((state)=>state.bucket.list);
-  // const buckets = bucket_list[0].todolist[0].content
-  //console.log(buckets)
+//   const bucket = useSelector((state)=>state.bucket.data);
+console.log(props)
 
-
-  // const dispatch = useDispatch();
-
-  // const {bucket} = props;
-
-  // React.useEffect(() => {
-  //   dispatch(bucketAction.LodeBucketDB(bucket));
-  // },[]);
-
-
+  const dispatch = useDispatch();
 
 
 
@@ -37,10 +24,10 @@ function BuckItem(props) {
     return (
       <React.Fragment>
         <div style={{marginTop:"10px"}}>
-        <Box>
-          <Text>한라산 등반하고 친구랑 놀기</Text>
-          <Button width="auto" padding="5px 10px" backgroundColor="transparent" color="black">✖</Button>
-        </Box>
+                <Box>
+                <Text>{props.todolist[0].content}</Text>
+                <Button width="auto" padding="5px 10px" backgroundColor="transparent" color="black">✖</Button>
+              </Box>
         </div>
       </React.Fragment>
     )}
@@ -49,13 +36,20 @@ function BuckItem(props) {
         <React.Fragment>
           <div style={{marginTop:"10px"}}>
           <Box checkState={checkState} onClick={complete}>
-            <Text>한라산 등반하고 친구랑 놀기</Text>
+            <Text>{props.todolist[0].content}</Text>
             <div>{checkState? "🗹":"☐"}</div>
           </Box>
           </div>
         </React.Fragment>
       )
   }   
+    }
+
+    
+    BuckItem.defaultProps = {
+      title: "",
+      imageUrl:"/images/cancle.png",
+      todolist:[{content: "반가워요", done : 0}]
     }
 
 const Box=styled.div`

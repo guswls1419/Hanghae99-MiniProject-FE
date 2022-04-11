@@ -1,7 +1,21 @@
 import React from "react";
 import styled from "styled-components";
+import { useSelector } from "react-redux";
 
 const ProgressBar=(props)=>{
+
+    const bucket_list = useSelector((state) => state.bucket.list);
+    console.log(bucket_list)
+
+    let count = 0;
+        bucket_list.map((b, idx) => {
+        if (b.completed) {
+        count++;
+        }
+        });
+
+        console.log(count);
+
     return(
         <ProgressBack>
             <ProgressPoint/>
