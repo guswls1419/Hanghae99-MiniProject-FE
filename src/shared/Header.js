@@ -7,8 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { actionCreators as userAction } from "../redux/modules/user";
 const Header =(props)=>{
     const dispatch =useDispatch();
-   useSelector((state)=>state.user)
-   const username=useSelector((state)=>state.user.user.username)
+   
+   const nickname=useSelector((state)=>state.user.userInfo.nickname)
    const is_login =useSelector((state)=>state.user.is_login)
    const is_session =sessionStorage.getItem("token")? true : false;
     const isPc = useMediaQuery ({
@@ -28,7 +28,7 @@ if(is_login && is_session){
                         </Grid>
                     <Grid width="700px" is_flex>
                         <Grid margin="60px 0px 0px 0px">
-                            {isPc &&<Text>{username}님 환영합니다</Text>}
+                            {isPc &&<Text>{nickname}님 환영합니다</Text>}
                         </Grid>    
                     </Grid>
                         <Grid margin="45px 0px 0px 0px" is_flex width="300px">

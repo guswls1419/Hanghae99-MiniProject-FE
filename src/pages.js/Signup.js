@@ -52,7 +52,7 @@ const Signup =(props)=>{
             window.alert("비밀번호를 입력해주세요")
             return;
         }
-        dispatch(userActions.signupFB(user_name,pwd,nick_name));
+        dispatch(userActions.signupDB(user_name,pwd,nick_name,pwd_check));
     };
 
     return(
