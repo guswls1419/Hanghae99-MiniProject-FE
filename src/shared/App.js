@@ -10,13 +10,26 @@ import styled from 'styled-components';
 import WriteBucket from '../pages.js/WriteBucket';
 import BucketDetail from "../pages.js/BucketDetail";
 import EditComment from '../pages.js/EditComment';
+import Permit from './Permit';
+import {useSelector, useDispatch} from "react-redux";
+import React from 'react';
+import {actionCreators as userAction} from "../redux/modules/user";
+
 
 function App() {
+  const dispatch =useDispatch();
+  const is_login =useSelector(state=>state.user.is_login);
+  const is_session =sessionStorage.getItem("token")? true : false;
+  React.useEffect(()=>{
+    if(is_session){
+      dispatch(userAction.loginCheckDB());
+    }
+  })
   return (
     <AppWrap>
       <ConnectedRouter history={history}>
       <Header/>
-
+      <Permit/>
         <Route path="/" exact>
           <PostList/>
         </Route>

@@ -9,10 +9,6 @@ const Post =(props)=>{
     React.useEffect(()=>{
     dispatch(BucketAction.LodeBucketDB());
   },[]);
-
-
-
-    console.log(props)
     return(
         <React.Fragment>
                 <Box src={props.imageUrl}>

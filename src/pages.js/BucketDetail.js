@@ -11,25 +11,21 @@ import { actionCreators as bucketAction } from "../redux/modules/bucket";
 
 
 const BucketDetail =(props)=>{
-
     const history = useHistory();
-
     const editWrite = () => {
         history.push('/write')
     }
-
     const [comments,setComments] = React.useState();
-
     const comment_cont = (e) =>{
         setComments(e.target.value);
     }
     const bucket_list = useSelector((state)=>state.bucket.list);
-    console.log(bucket_list)
      const dispatch = useDispatch();
      const {bucket} = props;
      React.useEffect(() => {
        dispatch(bucketAction.LodeBucketDB(bucket));
      },[]);
+   
     return(
         <>
           <WriteWrap>

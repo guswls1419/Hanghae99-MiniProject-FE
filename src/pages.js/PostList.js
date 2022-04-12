@@ -6,14 +6,12 @@ import {actionCreators as BucketAction} from "../redux/modules/bucket";
 import {useSelector, useDispatch} from "react-redux";
 
 const PostList =(props)=>{
-
   const dispatch = useDispatch();
-//   React.useEffect(()=>{
-//   dispatch(BucketAction.LodeBucketDB());
-// },[]);
+  React.useEffect(()=>{
+  dispatch(BucketAction.LodeBucketDB());
+},[]);
 
   const bucket_list = useSelector((state)=>state.bucket.list);
-  console.log(bucket_list);
     return(
         <React.Fragment>
                 <PostWrap>

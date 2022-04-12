@@ -10,8 +10,8 @@ import {actionCreators as userActions} from "../redux/modules/user";
 
 const Login =(props)=>{
     const dispatch=useDispatch();
-    const [user_name,setUserName]=React.useState('');
-    const [pwd,setPwd]=React.useState('');
+    const [username,setUserName]=React.useState('');
+    const [password,setPassword]=React.useState('');
     const [email_check,setEmailCheck]=React.useState(false);
     const userNameCheck =(e)=>{
     if(!emailCheck(e.target.value)){
@@ -23,11 +23,11 @@ const Login =(props)=>{
     setUserName(e.target.value);
 }
     const login=()=>{
-        if(user_name ==="" || pwd ===""){
+        if(username ==="" || password ===""){
             window.alert("아이디와 비밀번호를 입력해주세요");
             return ;
         }
-        dispatch(userActions.loginFB(user_name,pwd));
+        dispatch(userActions.loginFB(username,password));
     }
     return(
         <React.Fragment>
@@ -44,7 +44,7 @@ const Login =(props)=>{
                     <IdCheck>{email_check ?"":"이메일형식으로 입력해주세요"}</IdCheck>
                 </Grid>
                 <Grid padding="20px" margin="0px 0px 0px 0px">
-                    <Input  _onChange ={(e)=>{setPwd(e.target.value);}} placeholder="비밀번호를 입력해주세요" value={pwd}  type="password"></Input>
+                    <Input  _onChange ={(e)=>{setPassword(e.target.value);}} placeholder="비밀번호를 입력해주세요"  type="password"></Input>
                 </Grid>
                 <Grid padding="20px" margin="10px 0px">
                     <Button _onClick={login}>로그인하기</Button>
