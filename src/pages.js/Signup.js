@@ -2,12 +2,17 @@ import React from "react";
 import styled from "styled-components";
 import PostList from "./PostList";
 import { Input, Grid,Button,Text} from "../elements";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Logo from "../shared/logo.png"
 import { emailCheck } from "../shared/common";
 import { actionCreators as userActions } from "../redux/modules/user";
+import { useHistory } from "react-router-dom";
 
 const Signup =(props)=>{
+    const isIddupChecked =useSelector((state)=>state.user.isIdDupChecked)
+    // console.log(isIddupChecked);
+    const isNickdupChecked =useSelector((state)=>state.user)
+    const history =useHistory();
     const dispatch=useDispatch();
     const [user_name,setUserName]=React.useState('');
     const [pwd,setPwd]=React.useState('');
@@ -38,14 +43,14 @@ const Signup =(props)=>{
             window.alert("아이디를 입력해주세요")
             return;
         }
-        dispatch(userActions.usernameDupCheckFB(user_name))
+        dispatch(userActions.idDupCheckDB(user_name))
     }
     const nicknameDupCheck =()=>{
         if(nick_name===""){
             window.alert("닉네임을 입력해주세요")
             return;
         }
-        dispatch(userActions.nicknameDupCheckFB(nick_name))
+        dispatch(userActions.NickDupCheck(nick_name))
     }
     const signup=()=>{
         if(pwd ==""){
@@ -87,7 +92,7 @@ const Signup =(props)=>{
                     <Button backgroundColor="#F5C820" color="black" _onClick={signup}>회원가입하기</Button>
                 </Grid>
                 <Grid padding="20px" margin="10px 0px 0px 0px">
-                    <Button is_outlined backgroundColor="white" color="black">이미 회원이신가요? 로그인하기</Button>
+                    <Button is_outlined backgroundColor="white" color="black" _onClick={()=>(history.push("/login"))}>이미 회원이신가요? 로그인하기</Button>
                 </Grid>
             </Modal>
             <PostList/>
