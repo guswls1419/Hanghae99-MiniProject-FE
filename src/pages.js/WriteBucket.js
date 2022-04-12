@@ -6,9 +6,17 @@ import BuckItem from "../components/BucketItem";
 import styled from 'styled-components';
 import { useDispatch,useSelector } from 'react-redux'; 
 import { actionCreators as bucketAction } from "../redux/modules/bucket";
+
 import { useHistory } from "react-router-dom";
 
 export const WriteBucket = (props) => {
+  const bucket_list = useSelector((state)=>state.bucket.list);
+  const imageUrl = useSelector((state) =>state.image )
+  console.log(imageUrl)
+
+  React.useEffect(() => {
+    dispatch(bucketAction.LodeBucketDB());
+  },[]);
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -31,25 +39,18 @@ export const WriteBucket = (props) => {
     const add = () => {
       dispatch(bucketAction.addBucket(bk_list))
     }
-    const write = () => {
+    const Write_BK = () => {
         dispatch(bucketAction.createBucket({
-            imageUrl: "",
             title: name,
-            todolist:[{content: bk_list, done : 0}]
+            imageUrl: imageUrl,
+            todo:[{content: bk_list, done : 0}]
         }))
 
         // history.push('/bucket/:id')
     }
 
    
-const bucket_list = useSelector((state)=>state.bucket.list);
-  console.log(bucket_list)
-  // const dispatch = useDispatch();
-  const {bucket} = props;
 
-  React.useEffect(() => {
-    dispatch(bucketAction.LodeBucketDB());
-  },[]);
 
 
   //이미지 프리뷰
@@ -96,7 +97,7 @@ console.log(preview)
                 
                 
                 </Grid>
-                <SaveBtn onClick={write}>저장하기</SaveBtn>
+                <SaveBtn onClick={Write_BK}>저장하기</SaveBtn>
           </WriteWrap>
         </React.Fragment>
     )

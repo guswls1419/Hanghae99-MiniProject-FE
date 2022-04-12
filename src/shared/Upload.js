@@ -1,30 +1,40 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {actionCreator as imageActions} from "../redux/modules/image";
+import { actionCreators as imageAction } from "../redux/modules/image";
 
 const Upload = (porps) => {
+    
+        const dispatch = useDispatch();
+        const is_uploading = useSelector(state => state.image.uploading); 
+        const fileInput = React.useRef();
+    
+        const selectFile = (e) => {     
+            const reader = new FileReader();     
+            const file = fileInput.current.files[0];
+            reader.readAsDataURL(file);  
+
+            reader.onloadend = () => { 
+                dispatch(imageActions.setPreview(reader.result));
+            }
+            }
+    
+        const uploadDB = () => {
+            let image = fileInput.current.files[0];
+            dispatch(imageActions.uploadDB(image));
+        }
+    
+    
+        return (
+            <React.Fragment>
+                <input type="file" onChange={selectFile} ref={fileInput} disabled={is_uploading}/>
+                <button onClick={uploadDB}>업로드하기</button>
+            </React.Fragment>
+        )
+    }
 
 
-    const dispatch = useDispatch();
-    const fileInput = React.useRef();
-
-        const encodeFileToBase64 = (fileBlob) => {
-             const reader = new FileReader();
-             reader.readAsDataURL(fileBlob);
-              return new Promise((resolve) => {
-                   reader.onload = () => {
-                    dispatch(imageActions.setPreview(reader.result));
-                        resolve(); 
-                    }; 
-                }); 
-            };
 
 
-    return (
-        <React.Fragment>
-                <input type="file" onChange={(e) => { encodeFileToBase64(e.target.files[0]); }}/>
-        </React.Fragment>
-    )
-}
 
 export default Upload;

@@ -11,9 +11,13 @@ const ProgressBar=(props)=>{
         if (b.done === 1 ) {
          count ++;
         }
+        if (b.done === 0 ) {
+            count --;
+           }
+
         });
 
-        console.log(count);
+        //console.log(count);
 
     return(
         <ProgressBack>

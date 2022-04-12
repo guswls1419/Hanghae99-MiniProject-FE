@@ -1,5 +1,6 @@
 import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
+import axios from "axios";
 
 // actions
 const UPLOAD_IMG = "UPLOAD_IMG";
@@ -11,32 +12,33 @@ const setPreview = createAction(SET_PREVIEW, (preview) => ({ preview }));
 
 // initialState
 const initialState = {
-  image: "",
+  image: false,
   uploading: false,
   preview: null,
 };
 
-// const uploadDB = () => {
-//     const formData = new FormData();
-//     formData.append("file", files);
-//     axios({
-//       method: "post",
-//       url: "",
-//       data: formData,
-//       headers: {
-//         "Content-Type": "multipart/form-data",
-//         Authorization: localStorage.getItem("user_token"),
-//       },
-//     })
-//       .then((response) => {
-//         window.alert("사진이 업로드 되었습니다.");
-//         setImgFile(response.data.imageUrl); // 서버에서 받아온 이미지url
-//         setPreview(`${response.data.imageUrl}`); // 이미지url 변수에 저장
-//       })
-//       .catch((err) => {
-//         window.alert("사진 업로드 실패");
-//       });
-//   };
+const uploadDB = (files) => {
+  return async function (dispatch, getState, { history }) {
+    const formData = new FormData();
+    formData.append("file", files);
+    await axios({
+      method: "post",
+      url: "http://13.125.254.246/api/image",
+      data: formData,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+      .then((response) => {
+        window.alert("사진이 업로드 되었습니다.");
+        dispatch(uploadImg(response.data.imageUrl)); 
+        setPreview(`${response.data.imageUrl}`); 
+      })
+      .catch((err) => {
+        window.alert("사진 업로드 실패");
+      });
+  };
+}
 
 
 //reducer
@@ -44,9 +46,9 @@ export default handleActions(
   {
     [UPLOAD_IMG]: (state, action) =>
       produce(state, (draft) => {
-        draft.image = action.payload.image;
+        draft.imageUrl = action.payload.imageUrl;
         draft.uploading = false;
-        console.log(draft.image);
+        console.log(state, action);
       }),
     [SET_PREVIEW]: (state, action) =>
       produce(state, (draft) => {
@@ -59,7 +61,7 @@ export default handleActions(
 
 const actionCreator = {
   uploadImg,
- // uploadImgFB,
+  uploadDB,
   setPreview,
 //  deleteImgFB,
 };
