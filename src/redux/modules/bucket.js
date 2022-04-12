@@ -14,8 +14,8 @@ const DELETE_BUCKET = "DELETE_BUCKET";
 const PG_UPDATE_BUCKET = "PG_UPDATE_BUCKET";
 
 // *** 액션 생성 함수
-const createBucket = createAction(CREATE_BUCKET,(bucket) => ({bucket}));
-const addBucket = createAction(ADD_BUCKET,(buckets) => ({buckets}));//버킷추가
+const createBucket = createAction(CREATE_BUCKET,(bucket_list) => ({bucket_list}));
+const addBucket = createAction(ADD_BUCKET,(bucket) => ({bucket}));//버킷추가
 const lodeBucket = createAction(LODE_BUCKET,(bucket_list) => ({bucket_list}));
 const uplodeBucket = createAction(UPLODE_BUCKET,(bucket_id,bucket) => ({bucket_id,bucket})); 
 const deldteBucket = createAction(DELETE_BUCKET,(bucket_id) => ({bucket_id})); 
@@ -24,14 +24,15 @@ const PG_updateBucket = createAction(PG_UPDATE_BUCKET,(bucket_idx) => ({bucket_i
 
 
 
-
 // *** 초기값
 const initialState = {
-    list:[{
-    id : 1,
-    title: "제목입니다",
-    imageUrl:"/images/cancle.png",
-    todo:[{ id : 1, content: "반가워요", done : 0}]}]
+    list:[
+        {
+      id : 1,
+      title: "",
+      imageUrl:"",
+      todo:[{ id : 1, content: null, done : 0}]}
+  ]
 }
 
 // const initialPost = {
@@ -44,9 +45,9 @@ const initialState = {
 const LodeBucketDB = () => {
   return async function (dispatch, getState, { history }) {
     await axios
-        .get("http://localhost:3001/bucket")
+        .get("http://13.125.254.246/api/post")
         .then((result) => {
-          console.log(result.data)
+         // console.log(result.data)
           dispatch(lodeBucket(result.data))
         })
         .catch((err) => {
@@ -55,22 +56,26 @@ const LodeBucketDB = () => {
   };
 };
 
-const createBucketDB = (title,imageUrl,content) => {
+
+
+
+const createBucketDB = (bucket_list,title,imageUrl,content) => {
   return async function (dispatch, getState, { history }) {
-    //const token = localStorage.getItem("user_token");
+    console.log(bucket_list.todo[0][0].content)
+
     await axios
-        .post("http://localhost:3001/bucket",
-        {  title: title,
-           imageUrl:imageUrl,
-           todo:[{content: content , done : 0}]},
+        .post("http://13.125.254.246/api/post",
+        {  "title": bucket_list.title,
+           "imageUrl":`http://13.125.254.246${bucket_list.imageUrl}`,
+           "todo":[{"content": bucket_list.todo[0][0].content , "done" : false}]},
         {
          // headers: { Authorization: token },
         }
         )
         .then((response) => {
-          console.log(response)
+         // console.log(response)
           dispatch(createBucket(title,imageUrl,content))
-          history.replace("/bucket/${id}");
+          //history.replace("/bucket/${id}");
         })
         .catch((err) => {
           console.log("내가 작성한 게시물 조회 실패", err);
@@ -85,16 +90,16 @@ const createBucketDB = (title,imageUrl,content) => {
 export default handleActions(
   {
   [CREATE_BUCKET] : (state, action) => produce(state, (draft) => {
-    draft.list=action.payload.bucket;
-    //console.log(draft.list)
+    draft=action.payload.bucket;
+    console.log(action.payload.bucket_list)
   }), 
   [ADD_BUCKET] : (state, action) => produce(state, (draft) => {//버킷추가
-    draft.list=action.payload
-  console.log(action.payload)
+   draft.list.unshift(action.payload.bucket)
+  console.log(action,state)
   }), 
   [LODE_BUCKET] : (state, action) => produce(state, (draft) => {
-    draft.list=action.payload.bucket_list
-    //console.log(draft)
+    draft.list=action.payload.bucket_list[0].todolist
+   //console.log(action.payload.bucket_list[0].todolist)
   }),
   [UPLODE_BUCKET] : (state, action) => produce(state, (draft) => {
       
@@ -112,8 +117,8 @@ export default handleActions(
   // ? {...bk_todolist,   done : 1 }
   // : {...bk_todolist,   done : 0 }
 
-  console.log(bk_todolist.done)
-  console.log(draft.list[bk_idxd])
+  //console.log(bk_todolist.done)
+  //console.log(draft.list[bk_idxd])
      
   }),
   }, initialState

@@ -11,11 +11,7 @@ const uploadImg = createAction(UPLOAD_IMG, (image) => ({ image }));
 const setPreview = createAction(SET_PREVIEW, (preview) => ({ preview }));
 
 // initialState
-const initialState = {
-  image: false,
-  uploading: false,
-  preview: null,
-};
+const initialState = {};
 
 const uploadDB = (files) => {
   return async function (dispatch, getState, { history }) {
@@ -31,7 +27,8 @@ const uploadDB = (files) => {
     })
       .then((response) => {
         window.alert("사진이 업로드 되었습니다.");
-        dispatch(uploadImg(response.data.imageUrl)); 
+        dispatch(uploadImg(response.data.imageUrl));
+       console.log(response.data.imageUrl) 
         setPreview(`${response.data.imageUrl}`); 
       })
       .catch((err) => {
@@ -44,14 +41,12 @@ const uploadDB = (files) => {
 //reducer
 export default handleActions(
   {
-    [UPLOAD_IMG]: (state, action) =>
-      produce(state, (draft) => {
+    [UPLOAD_IMG]: (state, action) => produce(state, (draft) => {
         draft.imageUrl = action.payload.imageUrl;
         draft.uploading = false;
-        console.log(state, action);
+      //  console.log(state, action);
       }),
-    [SET_PREVIEW]: (state, action) =>
-      produce(state, (draft) => {
+    [SET_PREVIEW]: (state, action) => produce(state, (draft) => {
        draft.preview = action.payload.preview;
 
       }),

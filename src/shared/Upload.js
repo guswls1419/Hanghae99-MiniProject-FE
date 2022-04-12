@@ -17,18 +17,22 @@ const Upload = (porps) => {
             reader.onloadend = () => { 
                 dispatch(imageActions.setPreview(reader.result));
             }
-            }
-    
-        const uploadDB = () => {
+
             let image = fileInput.current.files[0];
             dispatch(imageActions.uploadDB(image));
-        }
+            
+            }
+    
+        // const uploadDB = () => {
+        //     let image = fileInput.current.files[0];
+        //     dispatch(imageActions.uploadDB(image));
+        // }
     
     
         return (
             <React.Fragment>
                 <input type="file" onChange={selectFile} ref={fileInput} disabled={is_uploading}/>
-                <button onClick={uploadDB}>업로드하기</button>
+                {/* <button onClick={uploadDB}>업로드하기</button> */}
             </React.Fragment>
         )
     }
