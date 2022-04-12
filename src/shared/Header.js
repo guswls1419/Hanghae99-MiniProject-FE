@@ -1,5 +1,4 @@
 import React from "react";
-import styled from "styled-components";
 import { Grid,Button,Text } from "../elements";
 import {useMediaQuery} from "react-responsive";
 import Logo from "./logo.png"

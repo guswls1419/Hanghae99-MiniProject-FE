@@ -1,4 +1,6 @@
 import './App.css';
+import Auth from "./Auth";
+import Profile from "./Profile";
 import PostList from '../pages.js/PostList';
 import {BrowserRouter, Route} from "react-router-dom";
 import { ConnectedRouter } from 'connected-react-router';
@@ -16,13 +18,20 @@ import React from 'react';
 import {actionCreators as userAction} from "../redux/modules/user";
 
 
+
 function App() {
+  
+  const REST_API_KEY="ccc8ac9f8e338ed91e0d3badd279b45f";
+  const REDIRECT_URI = "http://localhost:3000/oauth/kakao/callback";
+  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
   const dispatch =useDispatch();
   const is_login =useSelector(state=>state.user.is_login);
   const is_session =sessionStorage.getItem("token")? true : false;
   React.useEffect(()=>{
     if(is_session){
       dispatch(userAction.loginCheckDB());
+    }else{
+      history.push("/login");
     }
   })
   return (
@@ -33,7 +42,10 @@ function App() {
         <Route path="/" exact>
           <PostList/>
         </Route>
-
+        {/* <Route path="/oauth/kakao/callback" component={Auth}></Route> */}
+        {/* <Route path="/profile" exact>
+            <Profile/>
+          </Route> */}
         <Route path="/login" exact>
           <ModalWrap/>
           <Login/>
