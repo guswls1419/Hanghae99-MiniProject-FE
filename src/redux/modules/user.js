@@ -1,7 +1,8 @@
 import {createAction, handleActions} from "redux-actions";
 import {produce} from "immer";
 import { setCookie, getCookie, deleteCookie } from "../../shared/Cookie";
-import axios from 'axios'
+import axios from 'axios';
+import { setToken, delToken} from "../../shared/token";
 
 
 //1)액션 타입을 만든다
@@ -17,49 +18,36 @@ const getUser = createAction(GET_USER,(user)=>({user}));
 //3)initialState 만든다
 const initialState ={
     user:{
-        user_name:"godnjs1234",
-        nick_name:"권핑키"
+        username:"godnjs1234",
+        nickname:"권핑키"
     },
     nick_name_dupcheck:false,
     user_name_dupCheck:false,
 };
-//5) 페이지 이동을 위해 미들웨어를 만듦
-// const signupFB=(user_name,pwd,nick_name)=>{
-//     return function(dispatch,getState,{history}){
-//         auth
-//         .createUserWithEmailAndPassword(user_name,pwd)
-//         .then((user)=>{
-//             auth.currentUser.updateProfile({
-//                 displayName:nick_name,
-//             }).then(()=>{
-//                 dispatch(setUser({user_name:user_name, nick_name:nick_name}));
-//                 history.push("/");
-//             }).catch((error)=>{
-//                 console.log(error);
-//             })
-//         })
-//         .catch((error)=>{
-//             var errorCode =error.code;
-//             var errorMessage=error.message;
-//             console.log(errorCode,errorMessage);
-//         });
-//     }
-// }
+const loginCheckDB = () => {
+  console.log("로그인유지")
+  const token = sessionStorage.getItem("token");
+  return function (dispatch, getState, {history}) {
+    console.log(token) ;
+    }
+    
+  }
 
-const signupFB=(user_name,pwd,nick_name,pwd_check)=>{
+
+const signupFB=(username,pwd,nickname,pwd_check)=>{
     return async function(dispatch,getState,{history}){
         await axios.post('http://spt-prac.shop/user/signup', {
-            username:user_name,
+            username:username,
             password:pwd,
-            nickname:nick_name,
+            nickname:nickname,
             pwdCheck:pwd_check
           })
           .then(function (response) {
               console.log(response)
               dispatch(setUser({
-                username:user_name,
+                username:username,
                 password:pwd,
-                nickname:nick_name,
+                nickname:nickname,
                 pwdCheck:pwd_check
               }))
               history.push("/");
@@ -69,41 +57,57 @@ const signupFB=(user_name,pwd,nick_name,pwd_check)=>{
           });
     }
 }
-const nicknameDupCheckFB=(nick_name)=>{
+const nicknameDupCheckFB=(nickname)=>{
     return function(dispatch,getState,{history}){
-        console.log(nick_name)
+        console.log(nickname)
     }
 }
-const usernameDupCheckFB=(user_name)=>{
+const usernameDupCheckFB=(username)=>{
     return function(dispatch,getState,{history}){
-        console.log(user_name)
+        console.log(username)
     }
 }
-const loginFB =(user_name,pwd)=>{
-    return async function(dispatch,getState,{history}){
-        axios.post('http://spt-prac.shop/user/login', {
-            username: user_name,
-            password: pwd,
-          })
-          .then(function (response) {
-            console.log(response);
-            dispatch(setUser({
-                username:user_name,
-                password:pwd,
-              }))
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
-    }
+const loginFB = (username, password) => {
+    return function (dispatch, getState, { history }) {
+      axios
+      .post('http://spt-prac.shop/user/login',{
+        username: username,
+        password: password,
+      })
+      .then((res) => {
+        const user_info=res.config.data
+        const token_res = res.headers.authorization;
+        setToken(token_res);
+        return user_info
+      }).then((res)=>{
+            const username=JSON.parse(res).username
+          dispatch(setUser(username))  
+      })
+        .catch((err) => {
+          console.log("로그인 확인 실패", err)
+        })
+        history.replace('/')
+      .catch((err) => {
+        window.alert("이메일이나 패스워드를 다시 확인해주세요!")
+      })
+    };
+  };
+const logOutDB =(dispatch,getState,{history})=>{
+  console.log("로그아웃")
+  dispatch(logOut());
+  const token = sessionStorage.getItem("token");
+  delToken(token);
+  window.location.reload();
 }
+
+
 //4)리듀서 만든다(feat.immer)
 export default handleActions(
     {
         [SET_USER]:(state,action)=>
         produce(state,(draft)=>{
             setCookie("is_login","success");
-            draft.user = action.payload.user
+            draft.user.username = action.payload.user
             draft.is_login=true;
         }),
         [LOG_OUT]:(state,action)=>
@@ -111,6 +115,7 @@ export default handleActions(
             deleteCookie("is_login");
            draft.user=null;
            draft.is_login=false;
+           
           
         }),
         [GET_USER]:(state,action)=>
@@ -121,10 +126,12 @@ export default handleActions(
 );
 
 const actionCreators={
+    loginFB,
+    logOutDB,
+    loginCheckDB,
     signupFB,
     nicknameDupCheckFB,
-    usernameDupCheckFB,
-    loginFB
+    usernameDupCheckFB
 };
 
 export {actionCreators};
