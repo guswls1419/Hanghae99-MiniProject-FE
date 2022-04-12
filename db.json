@@ -6,7 +6,32 @@
             "imageUrl":"/images/cancle.png",
              "todolist":[{
                 "id" : 0,
-            "content": "반가워요",
+            "content": "111반가워요",
+            "done" : 0
+              },
+              {
+                "id" : 1,
+            "content": "222반가워요",
+            "done" : 0
+              },
+              {
+                "id" : 2,
+            "content": "333반가워요",
+            "done" : 0
+              },
+              {
+                "id" : 3,
+            "content": "444반가워요",
+            "done" : 0
+              },
+              {
+                "id" : 4,
+            "content": "555반가워요",
+            "done" : 0
+              },
+              {
+                "id" : 5,
+            "content": "666반가워요",
             "done" : 0
               }]
         },
@@ -80,5 +105,35 @@
                 "likesNum" : 3,
                 "comments" : 5
             }
-    ]
+    ],
+
+    "comment_list": [
+        {
+            "id" : 1,
+             "comment" : "나도 반가워요",
+             "username" : "guswls",
+             "createdAt":"2020-04-09T19:12:30.686",
+             "editCheck" : false
+         },
+         {
+            "id" : 2,
+             "comment": "1111나도 반가워요",
+             "username" : "guswls",
+             "createdAt":"2020-04-09T19:12:30.686",
+             "editCheck" : false
+         },
+         {
+            "id" : 3,
+             "comment": "222나도 반가워요",
+             "username" : "guswls",
+             "createdAt":"2020-04-09T19:12:30.686",
+             "editCheck" : false
+         },
+         {
+            "id" : 4,
+             "comment": "333나도 반가워요",
+             "username" : "guswls",
+             "createdAt":"2020-04-09T19:12:30.686",
+             "editCheck" : false
+         }]
   }

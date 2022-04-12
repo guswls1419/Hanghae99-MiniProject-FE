@@ -6,17 +6,18 @@ import BuckItem from "../components/BucketItem";
 import styled from 'styled-components';
 import { useDispatch,useSelector } from 'react-redux'; 
 import { actionCreators as bucketAction } from "../redux/modules/bucket";
+import {actionCreator as imageActions} from "../redux/modules/image";
 
 import { useHistory } from "react-router-dom";
 
 export const WriteBucket = (props) => {
   const bucket_list = useSelector((state)=>state.bucket.list);
   const imageUrl = useSelector((state) =>state.image )
-  console.log(imageUrl)
+  console.log(bucket_list)
 
-  React.useEffect(() => {
-    dispatch(bucketAction.LodeBucketDB());
-  },[]);
+  // React.useEffect(() => {
+  //   dispatch(bucketAction.LodeBucketDB());
+  // },[]);
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -25,7 +26,7 @@ export const WriteBucket = (props) => {
     const [bk_list,setBk_list] = React.useState();
 
     //console.log(name)
-   // console.log(bk_list)
+   console.log(bk_list)
 
     //인풋함수
     const bucketName = (e) =>{
@@ -37,33 +38,57 @@ export const WriteBucket = (props) => {
 
     //버튼 함수
     const add = () => {
-      dispatch(bucketAction.addBucket(bk_list))
+      dispatch(bucketAction.addBucket(
+        {content: bk_list, done: false}))
     }
     const Write_BK = () => {
-        dispatch(bucketAction.createBucket({
-            title: name,
+        dispatch(bucketAction.createBucketDB(
+            {title: name,
             imageUrl: imageUrl,
-            todo:[{content: bk_list, done : 0}]
-        }))
+            todo:[bucket_list]}
+        ))
 
+        let image = fileInput.current.files[0];
+        dispatch(imageActions.uploadDB(image));
         // history.push('/bucket/:id')
     }
 
-   
+   //이미지
+    const is_uploading = useSelector(state => state.image.uploading); 
+    const fileInput = React.useRef();
 
+    const selectFile = (e) => {     
+        const reader = new FileReader();     
+        const file = fileInput.current.files[0];
+        reader.readAsDataURL(file);  
+        reader.onloadend = () => { 
+            dispatch(imageActions.setPreview(reader.result));
+        }
+
+        
+        }
+
+
+            
 
 
   //이미지 프리뷰
   const preview = useSelector((state) => state.image.preview);
 
-console.log(preview)
+//console.log(preview)
 
     return (
         <React.Fragment>
           <WriteWrap>
           <Grid margin="80px 0px 30px 0px">
                 <Text bold>1.버킷리스트 미리보기 이미지를 등록해주세요.</Text>
-                <Upload/>
+
+
+                <input type="file" onChange={selectFile} ref={fileInput} disabled={is_uploading}/>
+
+
+
+                {/* <Upload/> */}
             </Grid>
             <Image src={preview
                         ? preview
@@ -83,6 +108,7 @@ console.log(preview)
                   </Grid>
                 </Grid>
                 <Grid margin="80px 0px 0px 0px">
+
                 {
                     bucket_list.map((a,i) => {
                       return(

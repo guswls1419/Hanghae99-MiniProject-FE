@@ -18,7 +18,7 @@ const EditComment =(props)=>{
     const comment_ct = (e) =>{
         setComment(e.target.value);
     }
-    console.log(comment)
+   // console.log(comment)
 
     return(
         <React.Fragment>

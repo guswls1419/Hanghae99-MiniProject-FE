@@ -6,113 +6,115 @@ import { produce } from "immer";
 //import firebase from "firebase";
 import { actionCreators as bucketActions } from "./bucket"
 import bucket from "./bucket";
+import axios from "axios";
 
 
 const SET_COMMENT = "SET_COMMENT";
 const ADD_COMMENT = "ADD_COMMENT";
-
-const LOADING = "LOADING";
-
-const setComment = createAction(SET_COMMENT, (bucket_id, comment_list) => ({bucket_id, comment_list}));
-const addComment = createAction(ADD_COMMENT, (bucket_id, comment) => ({bucket_id, comment}));
-
-const loading = createAction(LOADING, (is_loading) => ({ is_loading }));
-
-const initialState = {list : {
-    comment: "나도 반가워요",
-    username : "형기"}
-};
+const DELETE_COMMENT = "DELETE_COMMENT";
+const GET_COMMENT = "GET_COMMENT";
 
 
-// const addCommentFB = (post_id, contents) => {//db에 contents라고 초기값 적었기때문에contents로가져옴(comment_text값)
-//   return function(dispatch,getState, {history}){
-//     const commentDB = firestore.collection("comment");
-//     const user_info = getState().user.user;
 
-//     let comment = {
-//       post_id: post_id,
-//       user_id: user_info.uid,
-//       user_name: user_info.user_name,
-//       user_profile: user_info.user_profile,
-//       contents: contents,
-//       insert_dt: moment().format("YYYY-MM-DD hh:mm:ss"),
-//       }
+const setComment = createAction(SET_COMMENT, (comment_list) => ({comment_list}));
+const addComment = createAction(ADD_COMMENT, (comment_id, comment) => ({comment_id, comment}));
+const getComment = createAction(GET_COMMENT, (comment_id, comment) => ({comment_id, comment}));
+const deleteComment = createAction(DELETE_COMMENT, (comment_id,bucket_id) => ({comment_id,bucket_id}));
 
-//       commentDB.add(comment).then((doc) => {//then에 들어오는건 성공했을경우니깐, 댓글 갯수증가하는작업도 같이해준다.
-//         const postDB = firestore.collection("post");
+const initialState =  {list:{}}
 
-//         const post = getState().post.list.find((l) => l.id === post_id);
-//         //post정보 가져오기(댓글수 업데이트 ) // 이리스트 하나에서 id가 내가가지고있는 id가 같은지확인
 
-//         const increment = firebase.firestore.FieldValue.increment(1);
-//         //increment(1) 에 들어가있는 숫자만큼 현재가지고있는 값에서 추가해준다.
-//         postDB.doc(post_id).update({comment_cnt: increment}).then((_post) => {
-//           dispatch(addComment(post_id, comment));
 
-//           if (post) {
-//             dispatch(
-//             bucketActions.editPost(post_id, {
-//             comment_cnt: parseInt(post.comment_cnt) + 1,
-//             })
-//             );
-//           }
-          
+//댓글작성 미들웨어(수정필요)
+// const setCommentDB = (comment,username) => {
+//     return async function (dispatch, getState, { history }) {
+//      await axios
+//         .post(
+//             '   ',
+//           { comment:comment,
+//             username:username
+//          },
+//         //   {
+//         //     headers: {
+//         //       Authorization: cookie,
+//         //     },
+//         //   }
+//         )
+//         .then((res) => {
+//           dispatch(setComment(comment, username))
 //         })
-//       })
+//         .catch((err) => {
+//             console.log("댓글 작성 실패", err);
+//           });
+//       //history.push('/')
+//     }
 //   }
-// }
 
-
-// const getCommentFB = (post_id = null) => {// 넘겨주는 값?
-//     return function(dispatch, getState, {history}){
-
-//       if(!post_id){//id가 없으면 쿼리검색이 불가함으로 if문으로 막아버림
-//         return;
-//       }
-//       const commentDB = firestore.collection("comment");
-
-//       commentDB
-//       .where("post_id", "==", post_id) //id가 같은지 확인, 
-//       .orderBy("insert_dt","desc")//확인후 orderBy로 정렬(일시, 역순으로)
-//       .get().then((docs)=>{// 가져와서 then
-//         let list = [];
-
-//         docs.forEach((doc)=> {
-//           list.push({...doc.data(), id: doc.id});//comment id를 가져와서 배열을 만들어준다
+//댓글삭제
+// const deleteCommentDB = (comment_id,bucket_id) => {
+//     return async function (dispatch, getState, { history }) {
+//       await axios
+//         .delete("", {
+//         //   headers: {
+//         //     Authorization: cookie,
+//         //   },
 //         })
-        
-//         dispatch(setComment(post_id, list)); //액션생성자에서 넘겨준값과 동일하게 넘겨줘야함
-//       }).catch(err => {
-//           window.alert("댓글정보를 가져올수가 없네요!",err);
-//       })
-//     };
-// };
+//         .then((res) => {
+//           dispatch(deleteComment(comment_id,bucket_id))
+//         })
+//         .catch((err) => {
+//         console.log("댓글 삭제 실패", err);
+//         });
+//         history.push('/')
+//     }
+//   }
 
+const getCommentDB = () => {
+    return async function (dispatch, getState, { history }) {
+       await axios
+       .get("http://localhost:3001/comment_list")
+       .then((result) => {
+        dispatch(getComment(result.data))
+      })
+      .catch((err) => {
+        console.log("댓글작성 실패", err);
+      });
+    }
+}
 
 export default handleActions(
-  {// let data = {[post_id] : com_list, ...} 방을 만들어서 사용(딕셔너리) - 불필요한 데이터요청을 줄이기 위함
-      [SET_COMMENT]: (state, action) => produce(state, (draft) => {//post_id로 방만들기
-        draft.list[action.payload.bucket_id] = action.payload.comment_list;
-        console.log(state, action)
+  {
+      [SET_COMMENT]: (state, action) => produce(state, (draft) => {
+        draft[action.payload.bucket_id] = action.payload.comment_list;
+        //console.log(state, action)
       }),
       [ADD_COMMENT]: (state, action) => produce(state, (draft) => {
-      
         draft.list[action.payload.bucket_id].unshift(action.payload.comment);
-        console.log(action.payload.comment)
+        //console.log(action.payload.comment)
         }), 
-      // [LOADING]: (state, action) => 
-      // produce(state, (draft) => {
-      //   draft.is_loading = action.payload.is_loading;
-      // })
-  },
-  initialState
-);
+
+      [DELETE_COMMENT]: (state, action) => produce(state, (draft) => {
+        let idx = draft.list.findIndex(
+        (p) => p.comment_id === action.payload.comment_id
+        );
+        draft.list.splice(idx, 1); //삭제할 게시글의 index를 찾아서 splice로 지운다.
+        }),
+      [GET_COMMENT]: (state, action) => produce(state, (draft) => {
+        draft.list[action.payload.bucket_id] = action.payload.comment_list
+      })
+    },
+        initialState
+    );
+
 
 const actionCreators = {
- // getCommentFB,
+  //setCommentDB,
   setComment,
   addComment,
- // addCommentFB
+ deleteComment,
+//deleteCommentDB,
+getCommentDB,
+getComment
 };
 
 export { actionCreators };

@@ -11,7 +11,7 @@ const Post =(props)=>{
   },[]);
     return(
         <React.Fragment>
-                <Box src={props.imageUrl}>
+                <Box src={`http://13.125.254.246${props.imageUrl}`}>
                 <Grid padding="20px">
                         <Grid>
                             <div style={{float:"right", display:"flex"}}>

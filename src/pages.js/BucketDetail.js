@@ -12,13 +12,17 @@ import { actionCreators as commentAction } from "../redux/modules/comment";
 
 const BucketDetail =(props)=>{
     const history = useHistory();
-
     const bucket_list = useSelector((state)=>state.bucket.list);
+    const comment_list = useSelector((state)=> state.comment.list);
+    console.log(bucket_list)
+   
+
     const dispatch = useDispatch();
     const {bucket} = props;
-    React.useEffect(() => {
-      dispatch(bucketAction.LodeBucketDB(bucket));
-    },[]);
+
+    // React.useEffect(() => {
+    //   dispatch(bucketAction.LodeBucketDB(bucket));
+    // },[]);
 
     const editWrite = () => {
         history.push('/write')
@@ -29,11 +33,12 @@ const BucketDetail =(props)=>{
     const comment_cont = (e) =>{
         setComments(e.target.value);
     }
+    //console.log(comments)
     //댓글작성 버튼
     const comment_send = () => {
       dispatch(commentAction.setComment({
-        "comment": comments,
-        "username" : "형기"
+        comment: comments,
+        username : "현진"
         }))
     }
 
@@ -70,10 +75,10 @@ const BucketDetail =(props)=>{
                     {/* _onClick={comment_send} */}
                 </Grid>
                 <Grid  margin="20px 0px 0px 0px">
-                    <CommentItem/>
-                    <CommentItem/>
-                    <CommentItem/>
-                    <CommentItem/>
+                  {
+
+                  }
+                    <CommentItem />
                     <Grid margin="40px 0px 0px 0px"/>
                   {/* 밑의 버튼이랑 사이 간격이니 꼭 유지해주세요 */}
                 </Grid> 
