@@ -8,23 +8,37 @@ import CommentItem from "../components/CommentItem";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { actionCreators as bucketAction } from "../redux/modules/bucket";
-
+import { actionCreators as commentAction } from "../redux/modules/comment";
 
 const BucketDetail =(props)=>{
     const history = useHistory();
+
+    const bucket_list = useSelector((state)=>state.bucket.list);
+    const dispatch = useDispatch();
+    const {bucket} = props;
+    React.useEffect(() => {
+      dispatch(bucketAction.LodeBucketDB(bucket));
+    },[]);
+
     const editWrite = () => {
         history.push('/write')
     }
+
+    //댓글입력 인풋
     const [comments,setComments] = React.useState();
     const comment_cont = (e) =>{
         setComments(e.target.value);
     }
-    const bucket_list = useSelector((state)=>state.bucket.list);
-     const dispatch = useDispatch();
-     const {bucket} = props;
-     React.useEffect(() => {
-       dispatch(bucketAction.LodeBucketDB(bucket));
-     },[]);
+    //댓글작성 버튼
+    const comment_send = () => {
+      dispatch(commentAction.setComment({
+        "comment": comments,
+        "username" : "형기"
+        }))
+    }
+
+  
+ 
    
     return(
         <>
@@ -52,7 +66,8 @@ const BucketDetail =(props)=>{
                 </Grid>
                 <Grid is_flex margin="0px 0px 0px 0px">
                     <Input _onChange={comment_cont}/>
-                    <Button width="60px" color="#fff" margin='10px 0px 0px 0px'>입력</Button>
+                    <Button width="60px" color="#fff" margin='10px 0px 0px 0px' _onClick={comment_send} >입력</Button>
+                    {/* _onClick={comment_send} */}
                 </Grid>
                 <Grid  margin="20px 0px 0px 0px">
                     <CommentItem/>

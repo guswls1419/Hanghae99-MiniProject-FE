@@ -3,12 +3,16 @@ import styled from "styled-components";
 import {Grid,Text,Button} from "../elements";
 import Logut from "../shared/update.png"
 import { useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 const CommentItem =(props)=>{
     const history = useHistory();
     const editComment=()=>{
         history.push('/edit/:id')
     }
+
+    
+    
     return(
         <React.Fragment>
             <CommentBox>
