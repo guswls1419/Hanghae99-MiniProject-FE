@@ -14,7 +14,7 @@ const ProgressBar=(props)=>{
         }
         });
 
-        //console.log(count);
+        console.log(count);
 
     return(
         <ProgressBack>

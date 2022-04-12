@@ -33,7 +33,7 @@ export const WriteBucket = (props) => {
     }
     const write = () => {
         dispatch(bucketAction.createBucket({
-            imageUrl: "https://cdn4.vectorstock.com/i/1000x1000/76/73/red-delete-button-vector-9627673.jpg",
+            imageUrl: "",
             title: name,
             todolist:[{content: bk_list, done : 0}]
         }))
@@ -43,11 +43,8 @@ export const WriteBucket = (props) => {
 
    
 const bucket_list = useSelector((state)=>state.bucket.list);
- 
- console.log(bucket_list)
-
+  console.log(bucket_list)
   // const dispatch = useDispatch();
-
   const {bucket} = props;
 
   React.useEffect(() => {
@@ -55,6 +52,10 @@ const bucket_list = useSelector((state)=>state.bucket.list);
   },[]);
 
 
+  //이미지 프리뷰
+  const preview = useSelector((state) => state.image.preview);
+
+console.log(preview)
 
     return (
         <React.Fragment>
@@ -63,7 +64,10 @@ const bucket_list = useSelector((state)=>state.bucket.list);
                 <Text bold>1.버킷리스트 미리보기 이미지를 등록해주세요.</Text>
                 <Upload/>
             </Grid>
-            <div style={{width:"100%",height:"300px",backgroundColor:"grey"}}/>
+            <Image src={preview
+                        ? preview
+                        :"http://via.placeholder.com/400x300"}/>
+           
             <Grid margin="30px 0px 0px 0px">
               <Text bold>2.버킷리스트 이름을 등록해주세요.</Text>
             </Grid>
