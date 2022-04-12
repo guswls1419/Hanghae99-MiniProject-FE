@@ -7,18 +7,24 @@ import axios from 'axios';
 import { actionCreators as bucketAction } from "../redux/modules/bucket";
 
 function BuckItem(props) {
-//   const bucket = useSelector((state)=>state.bucket.data);
-console.log(props)
+   const bucket_list = useSelector((state)=>state.bucket.list);
+//console.log(bucket_list)
 
   const dispatch = useDispatch();
 
-
+  const id = props.id;
+  //console.log(id)
 
   const {state} = props;
   const [checkState, setCheckState] = useState(false);
+
+  //버튼함수
   const complete=()=>{
     checkState===true? setCheckState(false):setCheckState(true)
-    console.log(checkState);
+    
+    const bucket_idx = bucket_list.findIndex(p=>p.id === id); // 인덱스번호를 찾는다.
+    const bucket = bucket_list[bucket_idx];
+    dispatch(bucketAction.PG_updateBucket(bucket))
   }
   if(state==="is_edit"){
     return (

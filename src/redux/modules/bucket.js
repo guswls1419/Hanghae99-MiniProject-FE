@@ -15,7 +15,7 @@ const PG_UPDATE_BUCKET = "PG_UPDATE_BUCKET";
 
 // *** 액션 생성 함수
 const createBucket = createAction(CREATE_BUCKET,(bucket) => ({bucket}));
-const addBucket = createAction(ADD_BUCKET,(bucket) => ({bucket}));
+const addBucket = createAction(ADD_BUCKET,(buckets) => ({buckets}));
 const lodeBucket = createAction(LODE_BUCKET,(bucket_list) => ({bucket_list}));
 const uplodeBucket = createAction(UPLODE_BUCKET,(bucket_id,bucket) => ({bucket_id,bucket})); 
 const deldteBucket = createAction(DELETE_BUCKET,(bucket_id) => ({bucket_id})); 
@@ -44,7 +44,7 @@ const initialState = {
 const LodeBucketDB = () => {
   return async function (dispatch, getState, { history }) {
     await axios
-        .get("http://denia-wwdt.shop/api/posts")
+        .get("http://localhost:3001/bucket")
         .then((result) => {
           console.log(result.data)
           dispatch(lodeBucket(result.data))
@@ -64,7 +64,7 @@ export default handleActions(
   }), 
   [ADD_BUCKET] : (state, action) => produce(state, (draft) => {
     draft.list=action.payload.bucket
-   //  console.log()
+   
   }), 
   [LODE_BUCKET] : (state, action) => produce(state, (draft) => {
     draft.list=action.payload.bucket_list
@@ -79,11 +79,11 @@ export default handleActions(
   [PG_UPDATE_BUCKET] : (state, action) => produce(state, (draft) => {
  const bk_idxd =action.payload.bucket_idx.id
   const bk_todolist = action.payload.bucket_idx.todolist[0]
-  //draft.list[bk_idxd] = {...bk_todolist, done : 1 }
+  draft.list[bk_idxd] = {...bk_todolist, done : 1 }
 
-//   if(  draft.list[bk_idxd] = bk_todolist.done === 0 ){
-//     return{ ...bk_todolist, done : 1 }} 
-//  else {return {...bk_todolist, done : 0 }}
+  // draft.list[bk_idxd] = bk_todolist.done = 0
+  // ? {...bk_todolist,   done : 1 }
+  // : {...bk_todolist,   done : 0 }
 
   console.log(bk_todolist.done)
   console.log(draft.list[bk_idxd])
