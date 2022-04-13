@@ -18,25 +18,15 @@ const PG_UPDATE_BUCKET = "PG_UPDATE_BUCKET";
 
 // *** 액션 생성 함수
 const createBucket = createAction(CREATE_BUCKET,(bucket) => ({bucket}));
-//const addBucket = createAction(ADD_BUCKET,(bucket) => ({bucket}));//버킷추가
 const lodeBucket = createAction(LODE_BUCKET,(bucket_list) => ({bucket_list}));
-const getBucket = createAction(LODE_BUCKET,(postlist) => ({postlist}));
-const uplodeBucket = createAction(UPLODE_BUCKET,(bucket_id,bucket) => ({bucket_id,bucket})); 
-const deldteBucket = createAction(DELETE_BUCKET,(bucket_id) => ({bucket_id})); 
+const getBucket = createAction(GET_BUCKET,(postlist) => (postlist));
+const deleteTodo = createAction(DELETE_BUCKET,(bucket_idx) => ({bucket_idx})); 
 
 const PG_updateBucket = createAction(PG_UPDATE_BUCKET,(bucket_idx) => ({bucket_idx})); 
 
 // *** 초기값
 const initialState = {
-    list:[
-        {
-      id : 1,
-      title: "",
-      imageUrl:"",
-      todo:[{ content: null, done : 0}]}
-  ],
-  paging:{start:null,next:null,size:3},
-  is_loading:false,
+    list:[]
 }
 
 
@@ -54,7 +44,7 @@ const LodeBucketDB = () => {
         })
         .then((result) => {
           dispatch(lodeBucket(result.data))
-          console.log(result.data)
+          //console.log(result.data)
         })
         .catch((err) => {
           console.log(" 게시물 조회 실패", err);
@@ -68,10 +58,10 @@ const getBucketDB = (postId) => {
     const token = sessionStorage.getItem("token");
     console.log(postId)
     await axios
-        .get(`http://13.125.254.246/api/post/${postId}`, {
+        .get(`http://spt-prac.shop/api/post/${postId}`, {
           headers: { Authorization: token },})
         .then((response) => {
-          console.log(response.data)
+          console.log(response)
          dispatch(getBucket(response.data));
         })
         .catch((err) => {
@@ -80,11 +70,11 @@ const getBucketDB = (postId) => {
   };
 };
 
-
+//게시글 생성
 const createBucketDB = (bucket) => {
   return async function (dispatch, getState, { history }) {
     const token = sessionStorage.getItem("token");
-    console.log(bucket)
+    console.log(bucket.imgFile)
 await axios
         .post("http://spt-prac.shop/api/post",
         {  "title": bucket.title,
@@ -106,7 +96,34 @@ await axios
         });
   };
 };
+//todo 삭제
+const deleteTodoDB = (postId,todoNum) => {
+  return async function (dispatch, getState, { history }) {
+    const token = sessionStorage.getItem("token");
+    if (!postId) {
+      return;
+    }
+    const _bucket = getState().bucket.list;
 
+   await axios
+      .delete(`http://spt-prac.shop/api/post/${postId}/todo/${todoNum}`, {
+        headers: { 
+          "Authorization": `${token}`, 
+        },
+      })
+      .then((res) => {
+        const bucket_index = _bucket.findIndex((p) => {
+          return parseInt(p.postId) === parseInt(postId);
+        });
+
+        dispatch(deleteTodo(bucket_index));
+        history.replace("/");
+      })
+      .catch((err) => {
+        console.log("게시글 삭제 실패!", err);
+      });
+  };
+};
 
 
 
@@ -117,23 +134,20 @@ export default handleActions(
     draft=action.payload.bucket;
     //console.log(action.payload.bucket_list)
   }), 
-  // [ADD_BUCKET] : (state, action) => produce(state, (draft) => {//버킷추가
-  //  draft.list.unshift(action.payload.bucket)
-  // console.log(action,state)
-  // }), 
   [LODE_BUCKET] : (state, action) => produce(state, (draft) => {
     draft.list=action.payload.bucket_list
    console.log(action.payload.bucket_list)
   }),
-  [GET_BUCKET] : (state, action) => produce(state, (draft) => {
-    draft=action.payload.bucket_list
-   console.log(draft)
-  }),
-  [UPLODE_BUCKET] : (state, action) => produce(state, (draft) => {
-      
-  }),
+  [GET_BUCKET] : (state, action) => {
+    console.log(action.payload.todo)
+   return {
+   list :[ ...state.list, action.payload]
+  }
+  },
   [DELETE_BUCKET] : (state, action) => produce(state, (draft) => {
-      
+    draft.list = state.list.filter((l, idx) => {
+      return parseInt(action.payload.bucket_index) !== idx;
+    });
   }),
   [PG_UPDATE_BUCKET] : (state, action) => produce(state, (draft) => {
  const bk_idxd =action.payload.bucket_idx.id
@@ -155,14 +169,13 @@ export default handleActions(
 const actionCreators = {
   createBucket,
   createBucketDB,
-  //addBucket,
   lodeBucket,
   getBucket,
   getBucketDB,
-  uplodeBucket,
-  deldteBucket,
+  deleteTodo,
   LodeBucketDB,
   PG_updateBucket,
+  deleteTodoDB,
 
 }
 

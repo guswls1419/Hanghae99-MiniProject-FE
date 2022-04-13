@@ -39,6 +39,7 @@ export const WriteBucket = (props) => {
   const fileInput = React.useRef();
   const [imgFile, setImgFile] = React.useState("");
   const [Preview, setPreviewSrc] = React.useState('');
+  console.log(imgFile)
 
  //이미지 프리뷰
   const selectFile = () => {
@@ -58,6 +59,11 @@ export const WriteBucket = (props) => {
 //이미지업로드
     const Write_BK = () => {
         dispatch(bucketAction.createBucketDB({title:name,contentList,imgFile}))
+        
+      };
+
+
+      const test = () => {
         const file = fileInput.current.files[0];
         const token = sessionStorage.getItem("token");
         const formData = new FormData();
@@ -74,11 +80,13 @@ export const WriteBucket = (props) => {
           .then((response) => {
             window.alert("사진이 업로드 되었습니다.");
             setImgFile(`http://spt-prac.shop${response.data.imageUrl}`);
+            
           })
           .catch((err) => {
             window.alert("사진 업로드 실패");
           });
-      };
+      }
+
 
 
     return (
@@ -99,11 +107,12 @@ export const WriteBucket = (props) => {
           ref={fileInput}
         />
        </form>
+       <button onClick={test}>업로드</button>
           </Grid>
             <Image src={ Preview
                         ? Preview
                         :"http://via.placeholder.com/400x300"}/>
-           
+          
             <Grid margin="30px 0px 0px 0px">
               <Text bold>2.버킷리스트 이름을 등록해주세요.</Text>
             </Grid>
