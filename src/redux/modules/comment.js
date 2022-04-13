@@ -1,9 +1,5 @@
 import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
-//import { firestore } from "../../shared/firebase";
-//import "moment";
-//import moment from "moment";
-//import firebase from "firebase";
 import { actionCreators as bucketActions } from "./bucket"
 import bucket from "./bucket";
 import axios from "axios";
@@ -22,16 +18,16 @@ const getComment = createAction(GET_COMMENT, (commentId, comment) => ({commentId
 const deleteComment = createAction(DELETE_COMMENT, (commentId,postId) => ({commentId,postId}));
 
 const initialState =  {list:{
-  id : 1,
-  comment: '오아', 
-  username: 'ssss',
-  createdAt: '1시간전',
+  id : null,
+  comment: null, 
+  username: null,
+  createdAt: null,
   editCheck : false
 }}
 
 
 
-//댓글작성 미들웨어(수정필요)
+//댓글작성 미들웨어
 const setCommentDB = (comment,userInfo) => {
     return async function (dispatch, getState, { history }) {
       const token = sessionStorage.getItem("token");
@@ -39,7 +35,7 @@ const setCommentDB = (comment,userInfo) => {
     console.log(userInfo)
 
      await axios
-        .post("http://13.125.254.246/api/post/22/comment",
+        .post("http://spt-prac.shop/api/post/22/comment",
           {
             "comment" : comment,
             "username" :userInfo.username
