@@ -18,6 +18,7 @@ const getUser = createAction(GET_USER,(user)=>({user}));
 const idDupCheck =createAction(ID_DUP_CHECK,(user)=>({user}));
 
 
+
 //3)initialState 만든다
 const initialState ={
     userInfo:{
@@ -99,7 +100,7 @@ const loginCheckDB = () => {
       console.log(res)
         dispatch(setUser({
           username:res.data.username,
-          nickname:res.data.nickname
+          nickname:res.data.nickname.split("_")[1]
         })
         );
     })
@@ -109,7 +110,6 @@ const loginCheckDB = () => {
     
   }
 }
-
 
 const loginFB = (username, password) => {
   return function (dispatch, getState, { history }) {
@@ -193,6 +193,7 @@ const actionCreators={
     signupDB,
     idDupCheckDB,
     NickDupCheck,
+    setUser,
 };
 
 export {actionCreators};

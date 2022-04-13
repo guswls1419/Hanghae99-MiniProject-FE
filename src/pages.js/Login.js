@@ -9,6 +9,7 @@ import { emailCheck } from "../shared/common";
 import {actionCreators as userActions} from "../redux/modules/user";
 import {Link} from "react-router-dom";
 import { useHistory } from "react-router-dom";
+import KakaologinBtn from "../shared/kakao_login_medium_wide.png"
 const Login =(props)=>{
     const dispatch=useDispatch();
     const REST_API_KEY="ccc8ac9f8e338ed91e0d3badd279b45f";
@@ -55,10 +56,10 @@ const Login =(props)=>{
                     <Button _onClick={login}>로그인하기</Button>
                 </Grid>
                 <Grid padding="20px" margin="0px 0px">
-                    <p style={{textAlign:"center"}}>소셜 로그인</p>
+                    <p style={{textAlign:"center", fontSize:"14px"}}>소셜 로그인</p>
                 </Grid>
                 <Grid padding="20px" margin="10px 0px">
-                    <Button backgroundColor="#F5C820" color="black" ><a href={KAKAO_AUTH_URL}>카카오톡으로 로그인하기</a></Button>
+                    <a href={KAKAO_AUTH_URL}><img src={KakaologinBtn} style={{width:"100%", marginTop:"-4px"}}></img></a>
                 </Grid>
                 <Grid padding="20px">
                 <Button is_outlined backgroundColor="white" color="black" _onClick={()=>(history.push("/signup"))}>아직 회원이 아니시라면? 회원가입하기</Button>

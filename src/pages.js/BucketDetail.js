@@ -40,11 +40,7 @@ const BucketDetail =(props)=>{
         comment: comments,
         username : "현진"
         }))
-    }
-
-  
- 
-   
+    }  
     return(
         <>
           <WriteWrap>
