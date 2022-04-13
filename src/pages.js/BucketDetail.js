@@ -1,11 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 import {Grid,Text,Input,Button} from "../elements";
-import Upload from "../shared/Upload";
 import BuckItem from "../components/BucketItem";
 import ProgressBar from "../components/ProgressBar";
 import CommentItem from "../components/CommentItem";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { actionCreators as bucketAction } from "../redux/modules/bucket";
 import { actionCreators as commentAction } from "../redux/modules/comment";
@@ -13,16 +12,21 @@ import { actionCreators as commentAction } from "../redux/modules/comment";
 const BucketDetail =(props)=>{
     const history = useHistory();
     const bucket_list = useSelector((state)=>state.bucket.list);
-    const comment_list = useSelector((state)=> state.comment.list);
-    console.log(bucket_list)
+    const userInfo = useSelector((state) => state.user.userInfo)
+
+    
+   const dispatch = useDispatch();
+  const user_token = localStorage.getItem("user_token") ? true : false;
+  const params = useParams();
+  console.log(params.id)
+
+  React.useEffect(() => {
+    dispatch(bucketAction.getBucketDB(params.id));
    
+  }, []);
 
-    const dispatch = useDispatch();
-    const {bucket} = props;
 
-    // React.useEffect(() => {
-    //   dispatch(bucketAction.LodeBucketDB(bucket));
-    // },[]);
+    console.log(bucket_list)
 
     const editWrite = () => {
         history.push('/write')
@@ -33,14 +37,16 @@ const BucketDetail =(props)=>{
     const comment_cont = (e) =>{
         setComments(e.target.value);
     }
-    //console.log(comments)
+     
+
+
     //댓글작성 버튼
     const comment_send = () => {
-      dispatch(commentAction.setComment({
-        comment: comments,
-        username : "현진"
-        }))
-    }  
+      dispatch(commentAction.setCommentDB(comments, userInfo))
+      //console.log(comments, userInfo)
+    }
+
+
     return(
         <>
           <WriteWrap>
@@ -52,9 +58,9 @@ const BucketDetail =(props)=>{
             </Grid>
                 <Grid margin="80px 0px 0px 0px">
                   {
-                    bucket_list.map((a,i) => {
+                    bucket_list.map((a,idx) => {
                       return(
-                        <BuckItem key={a} {...a}/>
+                        <BuckItem key={idx} {...a}/>
                         )
                     })
                   } 

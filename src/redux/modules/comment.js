@@ -16,39 +16,50 @@ const GET_COMMENT = "GET_COMMENT";
 
 
 
-const setComment = createAction(SET_COMMENT, (comment_list) => ({comment_list}));
-const addComment = createAction(ADD_COMMENT, (comment_id, comment) => ({comment_id, comment}));
-const getComment = createAction(GET_COMMENT, (comment_id, comment) => ({comment_id, comment}));
-const deleteComment = createAction(DELETE_COMMENT, (comment_id,bucket_id) => ({comment_id,bucket_id}));
+const setComment = createAction(SET_COMMENT, (comment,userInfo) => ({comment,userInfo}));
+const addComment = createAction(ADD_COMMENT, (commentId, comment) => ({commentId, comment}));
+const getComment = createAction(GET_COMMENT, (commentId, comment) => ({commentId, comment}));
+const deleteComment = createAction(DELETE_COMMENT, (commentId,postId) => ({commentId,postId}));
 
-const initialState =  {list:{}}
+const initialState =  {list:{
+  id : 1,
+  comment: '오아', 
+  username: 'ssss',
+  createdAt: '1시간전',
+  editCheck : false
+}}
 
 
 
 //댓글작성 미들웨어(수정필요)
-// const setCommentDB = (comment,username) => {
-//     return async function (dispatch, getState, { history }) {
-//      await axios
-//         .post(
-//             '   ',
-//           { comment:comment,
-//             username:username
-//          },
-//         //   {
-//         //     headers: {
-//         //       Authorization: cookie,
-//         //     },
-//         //   }
-//         )
-//         .then((res) => {
-//           dispatch(setComment(comment, username))
-//         })
-//         .catch((err) => {
-//             console.log("댓글 작성 실패", err);
-//           });
-//       //history.push('/')
-//     }
-//   }
+const setCommentDB = (comment,userInfo) => {
+    return async function (dispatch, getState, { history }) {
+      const token = sessionStorage.getItem("token");
+    //   const postId = getState().bucket.list[0].id;
+    console.log(userInfo)
+
+     await axios
+        .post("http://13.125.254.246/api/post/22/comment",
+          {
+            "comment" : comment,
+            "username" :userInfo.username
+          },
+          {
+           headers: {
+            "Authorization": `${token}`, 
+            },
+          }
+        )
+
+        .then((res) => {
+          dispatch(setComment(comment,userInfo.username))
+        })
+        .catch((err) => {
+            console.log("댓글 작성 실패", err);
+          });
+      //history.push('/')
+    }
+  }
 
 //댓글삭제
 // const deleteCommentDB = (comment_id,bucket_id) => {
@@ -85,22 +96,23 @@ const getCommentDB = () => {
 export default handleActions(
   {
       [SET_COMMENT]: (state, action) => produce(state, (draft) => {
-        draft[action.payload.bucket_id] = action.payload.comment_list;
-        //console.log(state, action)
+        console.log(action.payload.postId)
+        draft[action.payload.postId] = action.payload.comment;
+        
       }),
       [ADD_COMMENT]: (state, action) => produce(state, (draft) => {
-        draft.list[action.payload.bucket_id].unshift(action.payload.comment);
+        draft.list[action.payload.postId].unshift(action.payload.comment);
         //console.log(action.payload.comment)
         }), 
 
       [DELETE_COMMENT]: (state, action) => produce(state, (draft) => {
         let idx = draft.list.findIndex(
-        (p) => p.comment_id === action.payload.comment_id
+        (p) => p.commentId === action.payload.commentId
         );
         draft.list.splice(idx, 1); //삭제할 게시글의 index를 찾아서 splice로 지운다.
         }),
       [GET_COMMENT]: (state, action) => produce(state, (draft) => {
-        draft.list[action.payload.bucket_id] = action.payload.comment_list
+        draft.list[action.payload.commentId] = action.payload.comment_list
       })
     },
         initialState
@@ -108,7 +120,7 @@ export default handleActions(
 
 
 const actionCreators = {
-  //setCommentDB,
+  setCommentDB,
   setComment,
   addComment,
  deleteComment,

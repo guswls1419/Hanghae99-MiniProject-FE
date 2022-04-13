@@ -3,29 +3,39 @@ import {Grid,Image,Text} from "../elements";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import {actionCreators as BucketAction} from "../redux/modules/bucket";
+import { useHistory } from "react-router-dom";
 
 const Post =(props)=>{
     const dispatch = useDispatch();
-    React.useEffect(()=>{
-    dispatch(BucketAction.LodeBucketDB());
-  },[]);
+    const history = useHistory();
+
+//     React.useEffect(()=>{
+//     dispatch(BucketAction.LodeBucketDB());
+//   },[]);
+
+  
+ 
+
+//console.log(props.imageUrl)
     return(
         <React.Fragment>
-                <Box src={`http://13.125.254.246${props.imageUrl}`}>
-                <Grid padding="20px">
-                        <Grid>
-                            <div style={{float:"right", display:"flex"}}>
-                                <div>🖤{props.like_cnt}</div>
-                                <div>💬{props.comment_cnt}</div>
-                            </div>
-                        </Grid>
-                        <Grid margin="220px 0px 0px 0px">
-                            <TitleText>
-                                {props.title}
-                            </TitleText>
-                        </Grid>
-                    </Grid>
-                </Box>
+                <Box onClick={()=>{
+                  history.push(`/bucket/${props.postId}`)
+                }}>
+                  <Grid padding="20px">
+                          <Grid>
+                              <div style={{float:"right", display:"flex"}}>
+                                  <div>🖤{props.likesNum}</div>
+                                  <div>💬{props.commentsNum}</div>
+                              </div>
+                          </Grid>
+                          <Grid margin="220px 0px 0px 0px">
+                              <TitleText>
+                                  {props.title}
+                              </TitleText>
+                          </Grid>
+                      </Grid>
+                  </Box>
         </React.Fragment>
     )
 }
@@ -49,7 +59,7 @@ const Box=styled.div`
 border-radius:10px;
 min-width:270px;
 width:280px;
-background:lightgrey;
+background-image:url(props.imageUrl);
 height:350px;
 margin:10px;
 box-shadow:
@@ -59,7 +69,7 @@ box-shadow:
 0 8px 8px hsl(0deg 0% 0% / 0.075),
 0 16px 16px hsl(0deg 0% 0% / 0.075)
 ;
-background:linear-gradient(to bottom, rgba(0,0,0,0.1)0%, rgba(0,0,0,0.5) 100%),url("${(props) => props.src}");
+background:linear-gradient(to bottom, rgba(0,0,0,0.1) 0% , rgba(0,0,0,0.5) 100%),url("${(props) => props.src}");
 `
 
 export default Post;
