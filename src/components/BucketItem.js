@@ -9,7 +9,6 @@ import { actionCreators as bucketAction } from "../redux/modules/bucket";
 function BuckItem(props) {
    const bucket_list = useSelector((state)=>state.bucket.list);
 
-   console.log(bucket_list)
 
   const dispatch = useDispatch();
 
@@ -24,33 +23,20 @@ function BuckItem(props) {
     const bucket = bucket_list[bucket_idx];
     const bucketDone = bucket.todolist
     dispatch(bucketAction.PG_updateBucket(bucket))
-    console.log(bucketDone)
-    
+
     checkState===true? setCheckState(false):setCheckState(true)
   }
-  if(state==="is_edit"){
-    return (
-      <React.Fragment>
-        <div style={{marginTop:"10px"}}>
-                <Box>
-                <Text>{props.id===false ? props.bucket : props.content}</Text>
-                <Button width="auto" padding="5px 10px" backgroundColor="transparent" color="black">✖</Button>
-              </Box>
-        </div>
-      </React.Fragment>
-    )}
-    else{
       return (
         <React.Fragment>
           <div style={{marginTop:"10px"}}>
           <Box checkState={checkState} onClick={complete}>
-            <Text>{props.content}</Text>
+            <Text>ddd</Text>
             <div>{checkState? "🗹":"☐"}</div>
           </Box>
           </div>
         </React.Fragment>
       )
-  }   
+  // }   
     }
 
     
