@@ -4,9 +4,13 @@ import {useMediaQuery} from "react-responsive";
 import Logo from "./logo.png"
 import { useDispatch, useSelector } from "react-redux";
 import { actionCreators as userAction } from "../redux/modules/user";
+import { useHistory } from "react-router-dom";
 const Header =(props)=>{
+    const history= useHistory();
     const dispatch =useDispatch();
-   
+   const goMybucket=()=>{
+       history.push("/bucket/:id")
+   }
    const nickname=useSelector((state)=>state.user.userInfo.nickname)
    const is_login =useSelector((state)=>state.user.is_login)
    const is_session =sessionStorage.getItem("token")? true : false;
@@ -31,7 +35,7 @@ if(is_login && is_session){
                         </Grid>    
                     </Grid>
                         <Grid margin="45px 0px 0px 0px" is_flex width="300px">
-                            <Button width="100px" margin="0 10px 0 0">마이버킷</Button>
+                            <Button width="100px" margin="0 10px 0 0" _onClick={goMybucket}>마이버킷</Button>
                             <Button width="100px" _onClick={logout}>로그아웃</Button>
                         </Grid>
                     </Grid>

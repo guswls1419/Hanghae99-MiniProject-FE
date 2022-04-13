@@ -1,9 +1,10 @@
 import { createAction, handleActions } from "redux-actions";
+import React from "react";
 import {produce} from "immer";
 import { bindActionCreators } from "redux";
 import axios from 'axios';
 import { useSelector } from "react-redux";
-
+import { useState } from "react";
 
 // *** 액션 타입
 const CREATE_BUCKET = "CREATE_BUCKET";
@@ -25,8 +26,6 @@ const deldteBucket = createAction(DELETE_BUCKET,(bucket_id) => ({bucket_id}));
 
 const PG_updateBucket = createAction(PG_UPDATE_BUCKET,(bucket_idx) => ({bucket_idx})); 
 
-
-
 // *** 초기값
 const initialState = {
     list:[
@@ -35,14 +34,11 @@ const initialState = {
       title: "",
       imageUrl:"",
       todo:[{ content: null, done : 0}]}
-  ]
+  ],
+  paging:{start:null,next:null,size:3},
+  is_loading:false,
 }
 
-// const initialPost = {
-//   title: "제목입니다",
-//     imageUrl:"/images/cancle.png",
-//   todolist:[{content: "반가워요", done : 0}]
-// }
 
 // *** 미들웨어
 const LodeBucketDB = () => {
@@ -50,10 +46,13 @@ const LodeBucketDB = () => {
     const token = sessionStorage.getItem("token");
     const user = getState().user
     await axios
-        .get(`http://13.125.254.246/api/posts`, {
-          headers: { Authorization: token },})
+        .get(`http://spt-prac.shop/api/posts`, {
+          headers: { Authorization: token },
+          params: {
+            _limit: 10
+           }
+        })
         .then((result) => {
-         // console.log(result.data)
           dispatch(lodeBucket(result.data))
           console.log(result.data)
         })
@@ -97,9 +96,6 @@ await axios
               "Authorization": `${token}`, 
             },
           })
-       
-          
-          
         .then((response) => {
          // console.log(response)
           dispatch(createBucket(bucket))
