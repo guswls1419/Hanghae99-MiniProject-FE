@@ -15,6 +15,7 @@ const setUser = createAction(SET_USER,(user)=>({user}));
 const logOut = createAction(LOG_OUT,(user)=>({user}));
 const getUser = createAction(GET_USER,(user)=>({user}));
 
+
 //3)initialState 만든다
 const initialState ={
     userInfo:{
@@ -57,7 +58,7 @@ const loginCheckDB = () => {
       console.log(res)
         dispatch(setUser({
           username:res.data.username,
-          nickname:res.data.nickname
+          nickname:res.data.nickname.split("_")[1]
         })
         );
     })
@@ -68,16 +69,6 @@ const loginCheckDB = () => {
   }
 }
 
-const nicknameDupCheckFB=(nickname)=>{
-    return function(dispatch,getState,{history}){
-        console.log(nickname)
-    }
-}
-const usernameDupCheckFB=(username)=>{
-    return function(dispatch,getState,{history}){
-        console.log(username)
-    }
-}
 const loginFB = (username, password) => {
   return function (dispatch, getState, { history }) {
     axios
@@ -158,8 +149,10 @@ const actionCreators={
     logOutDB,
     loginCheckDB,
     signupDB,
-    nicknameDupCheckFB,
-    usernameDupCheckFB
+    idDupCheckDB,
+    NickDupCheck,
+    setUser,
+
 };
 
 export {actionCreators};

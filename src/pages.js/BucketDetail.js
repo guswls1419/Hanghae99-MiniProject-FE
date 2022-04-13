@@ -15,7 +15,7 @@ const BucketDetail =(props)=>{
     const userInfo = useSelector((state) => state.user.userInfo)
 
     
-    const dispatch = useDispatch();
+   const dispatch = useDispatch();
   const user_token = localStorage.getItem("user_token") ? true : false;
   const params = useParams();
   console.log(params.id)
@@ -46,8 +46,7 @@ const BucketDetail =(props)=>{
       //console.log(comments, userInfo)
     }
 
- 
-   
+
     return(
         <>
           <WriteWrap>

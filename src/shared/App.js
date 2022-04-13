@@ -42,10 +42,7 @@ function App() {
         <Route path="/" exact>
           <PostList/>
         </Route>
-        {/* <Route path="/oauth/kakao/callback" component={Auth}></Route> */}
-        {/* <Route path="/profile" exact>
-            <Profile/>
-          </Route> */}
+        <Route path="/oauth/kakao/callback" component={Auth}></Route>
         <Route path="/login" exact>
           <ModalWrap/>
           <Login/>
