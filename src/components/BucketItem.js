@@ -9,12 +9,12 @@ import { actionCreators as bucketAction } from "../redux/modules/bucket";
 function BuckItem(props) {
    const bucket_list = useSelector((state)=>state.bucket.list);
 
+   console.log(props)
 
   const dispatch = useDispatch();
 
   const id = props.id;
 
-  const {state} = props;
   const [checkState, setCheckState] = useState(false);
 
   //버튼함수
@@ -24,13 +24,14 @@ function BuckItem(props) {
     const bucketDone = bucket.todolist
     dispatch(bucketAction.PG_updateBucket(bucket))
 
+
     checkState===true? setCheckState(false):setCheckState(true)
   }
       return (
         <React.Fragment>
           <div style={{marginTop:"10px"}}>
           <Box checkState={checkState} onClick={complete}>
-            <Text>ddd</Text>
+            <Text>{props.todo[0].content}</Text>
             <div>{checkState? "🗹":"☐"}</div>
           </Box>
           </div>
