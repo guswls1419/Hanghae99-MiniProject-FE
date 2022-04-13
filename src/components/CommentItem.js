@@ -11,14 +11,15 @@ const CommentItem =(props)=>{
         history.push('/edit/:id')
     }
 
-    
+    const comment = useSelector((state)=> state.comment.list)
+    //console.log(comment)
     
     return(
         <React.Fragment>
             <CommentBox>
                 <SubContents>
                     <Grid is_flex>
-                    <p>{props.user_name} | {props.insert_dt}</p>
+                    <p>{comment.username} | {comment.createdAt}</p>
                     <Grid is_flex width="40px">
                         <Button width="auto" padding="0px 5px 0px 10px" backgroundColor="transparent" _onClick={editComment}>
                             <img src={Logut} style={{width:"12px", margin:"5px 3px 0px 0px"}}/>
@@ -27,7 +28,7 @@ const CommentItem =(props)=>{
                     </Grid>
                     </Grid>
                 </SubContents>
-                    <Comments>{props.contents}</Comments>
+                    <Comments>{comment.comment}</Comments>
             </CommentBox>
         </React.Fragment>
         
