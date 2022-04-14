@@ -12,6 +12,10 @@ const Header =(props)=>{
    const goMybucket=()=>{
        history.push("/write")
    }
+   const load = ()=> {
+    history.push('/')
+    window.location.reload();
+}
 
    const nickname=useSelector((state)=>state.user.userInfo.nickname)
    const is_login =useSelector((state)=>state.user.is_login)
@@ -32,7 +36,7 @@ if(is_login && is_session){
                     <Grid width="80%" margin="0 auto" is_flex>
                         <Grid>
                             <Link to ="/">
-                            <img src={Logo} width="50px" style={{marginTop:"13px"}} />
+                            <img src={Logo}  onClick={load} width="50px" style={{marginTop:"13px"}} />
                             </Link>
                         </Grid>
                     <Grid width="700px" is_flex>

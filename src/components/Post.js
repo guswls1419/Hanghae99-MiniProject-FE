@@ -13,10 +13,11 @@ const Post =(props)=>{
     const history = useHistory();
     return(
         <React.Fragment>
-                <Box style = {{backgroundImage:`url(${props.image_url})`,
+                <Box style = {{backgroundImage:`linear-gradient(to bottom, rgba(0,0,0,0.1) 0% , rgba(0,0,0,0.5) 100%),url(${props.image_url})`,
                                 backgroundRepeat: "no-repeat",
                                 backgroundPosition: "center",
-                                backgroundSize: "cover"}} 
+                                backgroundSize: "cover",
+                            }} 
                                 onClick={()=>{
                   history.push(`/bucket/${props.post_id}`)
                   window.location.reload();
@@ -49,7 +50,7 @@ const TitleText=styled.div`
 width:100%;
 height:63px;
 font-size:16px;
-color:black;
+color:white;
 overflow:hidden;
 text-overflow:ellipsis;
 white-space:initial;
