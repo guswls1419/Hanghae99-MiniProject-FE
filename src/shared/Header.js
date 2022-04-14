@@ -4,13 +4,15 @@ import {useMediaQuery} from "react-responsive";
 import Logo from "./logo.png"
 import { useDispatch, useSelector } from "react-redux";
 import { actionCreators as userAction } from "../redux/modules/user";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 const Header =(props)=>{
+    const bucketlist = useSelector((state) => state.bucket.list);
     const history= useHistory();
     const dispatch =useDispatch();
    const goMybucket=()=>{
-       history.push("/bucket/:id")
+       history.push("/write")
    }
+
    const nickname=useSelector((state)=>state.user.userInfo.nickname)
    const is_login =useSelector((state)=>state.user.is_login)
    console.log(nickname);
@@ -29,7 +31,9 @@ if(is_login && is_session){
                 <Grid width="100%" height="80px" bg="rgba(255,255,255,0.8)">
                     <Grid width="80%" margin="0 auto" is_flex>
                         <Grid>
-                            <img src={Logo} width="50px" style={{marginTop:"13px"}}/>
+                            <Link to ="/">
+                            <img src={Logo} width="50px" style={{marginTop:"13px"}} />
+                            </Link>
                         </Grid>
                     <Grid width="700px" is_flex>
                         <Grid margin="60px 0px 0px 0px">

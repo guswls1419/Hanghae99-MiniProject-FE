@@ -10,12 +10,14 @@ const Post =(props)=>{
     const bucket_list=useSelector((state)=>state.bucket.list)
     const dispatch = useDispatch();
     const history = useHistory();
-
-
     return(
         <React.Fragment>
-                <Box onClick={()=>{
-                  history.push(`/bucket/${props.post_id}`)
+                <Box style = {{backgroundImage:`url(${props.imageUrl})`,
+                                backgroundRepeat: "no-repeat",
+                                backgroundPosition: "center",
+                                backgroundSize: "cover"}} 
+                                onClick={()=>{
+                  history.push(`/bucket/${props.postId}`)
                   window.location.reload();
                 }}>
                   <Grid padding="20px">
@@ -41,11 +43,12 @@ Post.defaultProps={
     like_cnt:0,
     comment_cnt:0,
 }
+
 const TitleText=styled.div`
 width:100%;
 height:63px;
 font-size:16px;
-color:white;
+color:black;
 overflow:hidden;
 text-overflow:ellipsis;
 white-space:initial;
@@ -55,6 +58,7 @@ const Box=styled.div`
 border-radius:10px;
 min-width:270px;
 width:280px;
+background:linear-gradient(to bottom, rgba(0,0,0,0.1) 0% , rgba(0,0,0,0.5) 100%),url(imageUrl);
 height:350px;
 margin:10px;
 box-shadow:
@@ -62,9 +66,8 @@ box-shadow:
 0 2px 2px hsl(0deg 0% 0% / 0.075),
 0 4px 4px hsl(0deg 0% 0% / 0.075),
 0 8px 8px hsl(0deg 0% 0% / 0.075),
-0 16px 16px hsl(0deg 0% 0% / 0.075)
-;
-background:linear-gradient(to bottom, rgba(0,0,0,0.1) 0% , rgba(0,0,0,0.5) 100%),url("${(props) => props.src}");
+0 16px 16px hsl(0deg 0% 0% / 0.075);
 `
+
 
 export default Post;
