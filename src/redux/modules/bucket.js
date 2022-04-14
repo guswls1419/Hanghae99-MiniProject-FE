@@ -37,8 +37,10 @@ const LodeBucketDB = (page=1,size=8) => {
       return;
     }
     dispatch(loading(true));
+    const token = sessionStorage.getItem("token");
     await axios
-        .get(`http://denia-wwdt.shop/api/postsWithPage?page=${page}&size=8&sortBy=id&isAsc=true`)
+        .get(`http://spt-prac.shop/api/postsWithPage?page=${page}&size=8&sortBy=id&isAsc=true`,{
+          headers: { Authorization: token },})
         .then((result) => {
           console.log(result);
           let paging={
@@ -65,7 +67,6 @@ const LodeBucketDB = (page=1,size=8) => {
         });
   };
 };
-
 
 const getBucketDB = (postId) => {
   return async function (dispatch, getState, { history }) {
@@ -219,6 +220,7 @@ export default handleActions(
   }),
   [PG_UPDATE_BUCKET] : (state, action) => produce(state, (draft) => {
   const bk_idxd =action.payload.bucket_idx.id
+  console.log(action.payload.bucket_idx.id)
   const bk_todolist = action.payload.bucket_idx.todolist[0]
   const done =bk_todolist.done
   draft.list[bk_idxd] = {...bk_todolist, done : done === 0 ? 1 : (done===1 ? 0 : 1) }

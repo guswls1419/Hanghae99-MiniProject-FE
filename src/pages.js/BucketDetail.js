@@ -13,7 +13,7 @@ import BucketItem from "../components/BucketItem";
 const BucketDetail =(props)=>{
     const history = useHistory();
     const bucket_list = useSelector((state)=>state.bucket.list)
-    console.log(bucket_list[0].todo);
+    //console.log(bucket_list[0].todo);
     const userInfo = useSelector((state) => state.user.userInfo)
     const comment = useSelector((state)=> state.comment.list)
   

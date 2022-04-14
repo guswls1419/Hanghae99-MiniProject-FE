@@ -7,18 +7,19 @@ import { useHistory } from "react-router-dom";
 import {useSelector} from "react-redux";
 
 const Post =(props)=>{
+    console.log(props)
     const bucket_list=useSelector((state)=>state.bucket.list)
     const dispatch = useDispatch();
     const history = useHistory();
 console.log(props.imageUrl)
     return(
         <React.Fragment>
-                <Box style = {{backgroundImage:`url(${props.imageUrl})`,
+                <Box style = {{backgroundImage:`url(${props.image_url})`,
                                 backgroundRepeat: "no-repeat",
                                 backgroundPosition: "center",
                                 backgroundSize: "cover"}} 
                                 onClick={()=>{
-                  history.push(`/bucket/${props.postId}`)
+                  history.push(`/bucket/${props.post_id}`)
                   window.location.reload();
                 }}>
                   <Grid padding="20px">
@@ -59,7 +60,7 @@ const Box=styled.div`
 border-radius:10px;
 min-width:270px;
 width:280px;
-background:linear-gradient(to bottom, rgba(0,0,0,0.1) 0% , rgba(0,0,0,0.5) 100%),url(imageUrl);
+background:linear-gradient(to bottom, rgba(0,0,0,0.1) 0% , rgba(0,0,0,0.5) 100%),url(image_url);
 height:350px;
 margin:10px;
 box-shadow:
