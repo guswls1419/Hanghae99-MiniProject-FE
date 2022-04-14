@@ -10,6 +10,7 @@ import Login from '../pages.js/Login';
 import Signup from '../pages.js/Signup';
 import styled from 'styled-components';
 import WriteBucket from '../pages.js/WriteBucket';
+import EditBucket from '../pages.js/EditBucket';
 import BucketDetail from "../pages.js/BucketDetail";
 import EditComment from '../pages.js/EditComment';
 import Permit from './Permit';
@@ -59,6 +60,7 @@ function App() {
         </Route>
 
         <Route path="/write" exact component={WriteBucket}/>
+        <Route path="/editB/:id" exact component={EditBucket}/>
         <Route path="/bucket/:id" exact component={BucketDetail}/>
       </ConnectedRouter>
     </AppWrap>

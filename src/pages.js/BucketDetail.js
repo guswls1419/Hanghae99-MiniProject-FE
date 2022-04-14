@@ -15,18 +15,23 @@ const BucketDetail =(props)=>{
     const bucket_list = useSelector((state)=>state.bucket.list)
     console.log(bucket_list[0].todo);
     const userInfo = useSelector((state) => state.user.userInfo)
-    const dispatch = useDispatch();
-    const user_token = localStorage.getItem("user_token") ? true : false;
-    const params = useParams();
+    const comment = useSelector((state)=> state.comment.list)
+  
 
-    React.useEffect(() => {
+   const dispatch = useDispatch();
+  const user_token = localStorage.getItem("user_token") ? true : false;
+  const params = useParams();
+  //const imgUrl = bucket_list[0].imageUrl
+  //console.log(params.id)
+
+  React.useEffect(() => {
     dispatch(bucketAction.getBucketDB(params.id));
    
   }, [dispatch,params.id]);
-    console.log(bucket_list)
 
     const editWrite = () => {
-        history.push('/write')
+        history.push(`/editB/${bucket_list[0].postId}`)
+      
     }
     const [comments,setComments] = React.useState();
     const comment_cont = (e) =>{
@@ -34,7 +39,7 @@ const BucketDetail =(props)=>{
     }
  
     const comment_send = () => {
-      dispatch(commentAction.setCommentDB(comments, userInfo))
+      dispatch(commentAction.setCommentDB({comments:comments, Id : params.id, userInfo, imageUrl:bucket_list[0].imageUrl}))
       //console.log(comments, userInfo)
     }
     const [checkState, setCheckState] = React.useState(false);
@@ -50,7 +55,7 @@ const BucketDetail =(props)=>{
             <Grid margin="80px 0px 30px 0px">
                 <Text bold>김버킷의 버킷리스트</Text>
                 <Grid margin="30px 0px 0px 0px">
-                <ProgressBar/>
+                {/* <ProgressBar/> */}
             </Grid>
             </Grid>
                 <Grid margin="80px 0px 0px 0px">
@@ -63,7 +68,6 @@ const BucketDetail =(props)=>{
                                 <div>{checkState? "🗹":"☐"}</div>
                               </Box>
                               </div>
-                          // <BuckItem key={idx} {...a}/>
                         )
                     })
                   } 
@@ -80,10 +84,11 @@ const BucketDetail =(props)=>{
                     {/* _onClick={comment_send} */}
                 </Grid>
                 <Grid  margin="20px 0px 0px 0px">
-                  {
-
-                  }
-                    <CommentItem />
+                 <CommentItem postId={params.id} />
+                <CommentItem postId={params.id} />
+                <CommentItem postId={params.id} />
+                <CommentItem postId={params.id} />
+                <CommentItem postId={params.id} />
                     <Grid margin="40px 0px 0px 0px"/>
                   {/* 밑의 버튼이랑 사이 간격이니 꼭 유지해주세요 */}
                 </Grid> 
