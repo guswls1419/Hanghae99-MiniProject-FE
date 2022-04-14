@@ -37,8 +37,10 @@ const LodeBucketDB = (page=1,size=8) => {
       return;
     }
     dispatch(loading(true));
+    const token = sessionStorage.getItem("token");
     await axios
-        .get(`http://denia-wwdt.shop/api/postsWithPage?page=${page}&size=8&sortBy=id&isAsc=true`)
+        .get(`http://spt-prac.shop/api/postsWithPage?page=${page}&size=8&sortBy=id&isAsc=true`,{
+          headers: { Authorization: token },})
         .then((result) => {
           console.log(result);
           let paging={
