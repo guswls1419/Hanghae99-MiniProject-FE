@@ -62,8 +62,8 @@ const history = useHistory();
     const edit_BK = () => {
         const file = fileInput.current.files[0];
         dispatch(bucketAction.editBucketDB({title:name, postId:params.id,contentList,imgFile,file}))
-        // history.push(`/bucket/${params.id}`)
-        // window.location.reload();
+        history.push(`/`)
+        window.location.reload();
       };
 
       
@@ -86,7 +86,6 @@ const history = useHistory();
           <WriteWrap>
           <Grid margin="80px 0px 30px 0px">
                 <Text bold>1.버킷리스트 미리보기 이미지를 수정해주세요.</Text>
-
                 {/* <input type="file" onChange={selectFile} ref={fileInput} disabled={is_uploading}/> */}
                <form >
                 <input
