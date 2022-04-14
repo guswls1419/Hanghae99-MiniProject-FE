@@ -6,21 +6,23 @@ import styled from 'styled-components';
 import { useDispatch,useSelector } from 'react-redux'; 
 import { actionCreators as bucketAction } from "../redux/modules/bucket";
 import axios from 'axios';
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 
-export const WriteBucket = (props) => {
-  const bucket_list = useSelector((state)=>state);
+export const EditBucket = (props) => {
+  const bucket_list = useSelector((state)=>state.bucket.list);
   const preview = useSelector((state) => state.image); 
+  const params = useParams();
+//console.log(params.id)
 
-//console.log(bucket_list)
+console.log(bucket_list)
 
   const dispatch = useDispatch();
-
+const history = useHistory();
     const [name,setName] = React.useState();
     const [bkContent,setBkContent] = React.useState({"content": "" , "done" : false});
     const [contentList, setContentList] = React.useState([]);
 
- 
+  
     //인풋함수
     const bucketName = (e) =>{
         setName(e.target.value);
@@ -39,7 +41,7 @@ export const WriteBucket = (props) => {
   const fileInput = React.useRef();
   const [imgFile, setImgFile] = React.useState("");
   const [Preview, setPreviewSrc] = React.useState('');
-  console.log(imgFile)
+ // console.log(imgFile)
 
  //이미지 프리뷰
   const selectFile = () => {
@@ -54,24 +56,38 @@ export const WriteBucket = (props) => {
          }; 
       });
  
-    };
+      };
 
 //이미지업로드
-    const Write_BK = () => {
-      const file = fileInput.current.files[0];
-        dispatch(bucketAction.createBucketDB({title:name,contentList,file}))
-        
+    const edit_BK = () => {
+        const file = fileInput.current.files[0];
+        dispatch(bucketAction.editBucketDB({title:name, postId:params.id,contentList,imgFile,file}))
+        // history.push(`/bucket/${params.id}`)
+        // window.location.reload();
       };
+
       
-    
+      
+      const post_id = props.match.params.id;
+     
+      const is_edit = post_id
+      let _post = is_edit
+
+      const [contents, setContents] = React.useState(
+        _post ? _post.contents : "" 
+      )
+
+      const changeContents = (e) => {
+        setContents(e.target.value);
+    };
 
     return (
         <React.Fragment>
           <WriteWrap>
           <Grid margin="80px 0px 30px 0px">
-                <Text bold>1.버킷리스트 미리보기 이미지를 등록해주세요.</Text>
+                <Text bold>1.버킷리스트 미리보기 이미지를 수정해주세요.</Text>
 
-              
+                {/* <input type="file" onChange={selectFile} ref={fileInput} disabled={is_uploading}/> */}
                <form >
                 <input
           cursor="pointer"
@@ -83,15 +99,17 @@ export const WriteBucket = (props) => {
           ref={fileInput}
         />
        </form>
+       {/* <button onClick={test}>업로드</button> */}
           </Grid>
             <Image src={ Preview
                         ? Preview
                         :"http://via.placeholder.com/400x300"}/>
-          
+
+   
             <Grid margin="30px 0px 0px 0px">
-              <Text bold>2.버킷리스트 이름을 등록해주세요.</Text>
+              <Text bold>2.버킷리스트 이름을 수정해주세요.</Text>
             </Grid>
-            <Input placeholder="김버킷의 버킷리스트"  _onChange={bucketName}/>
+            <Input value={contents} placeholder="김버킷의 버킷리스트" _onChange={bucketName} />
 
             <Grid margin="50px 0px">
               <Text bold>3.버킷리스트 항목을 추가해보세요.</Text>
@@ -124,7 +142,7 @@ export const WriteBucket = (props) => {
                 
                 </Grid>
                 <Link to='/'>
-                  <SaveBtn onClick={Write_BK}>저장하기</SaveBtn>
+                <SaveBtn onClick={edit_BK}>수정하기</SaveBtn>
                 </Link>
           </WriteWrap>
         </React.Fragment>
@@ -172,4 +190,4 @@ border:none;
 cursor:pointer;
 `
 
-export default WriteBucket;
+export default EditBucket;
