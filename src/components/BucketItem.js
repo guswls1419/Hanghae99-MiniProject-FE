@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { actionCreators as bucketAction } from "../redux/modules/bucket";
 
-function BuckItem(props) {
+function BucketItem(props) {
    const bucket_list = useSelector((state)=>state.bucket.list);
 
    console.log(props)
@@ -19,18 +19,12 @@ function BuckItem(props) {
 
   //버튼함수
   const complete=()=>{
-    const bucket_idx = bucket_list.findIndex(p=>p.id === id); // 인덱스번호를 찾는다.
-    const bucket = bucket_list[bucket_idx];
-    const bucketDone = bucket.todolist
-    dispatch(bucketAction.PG_updateBucket(bucket))
-
-
-    checkState===true? setCheckState(false):setCheckState(true)
+    console.log("버튼 클릭했습니다");
   }
       return (
         <React.Fragment>
           <div style={{marginTop:"10px"}}>
-          <Box checkState={checkState} onClick={complete}>
+          <Box checkState={checkState} _onClick={complete}>
             <Text>{props.todo[0].content}</Text>
             <div>{checkState? "🗹":"☐"}</div>
           </Box>
@@ -41,7 +35,7 @@ function BuckItem(props) {
     }
 
     
-    BuckItem.defaultProps = {
+    BucketItem.defaultProps = {
       title: "",
       imageUrl:"/images/cancle.png",
       todolist:[{content: "반가워요", done : false}]
@@ -67,4 +61,4 @@ box-sizing:border-box;
 cursor:pointer;
 text-docoration:${(props)=>props.checkState? "line-through":"none"};
 `
-export default BuckItem
+export default BucketItem

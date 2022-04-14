@@ -6,12 +6,14 @@ import ProgressBar from "../components/ProgressBar";
 import CommentItem from "../components/CommentItem";
 import { useHistory, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { actionCreators as bucketAction } from "../redux/modules/bucket";
+import bucket, { actionCreators as bucketAction } from "../redux/modules/bucket";
 import { actionCreators as commentAction } from "../redux/modules/comment";
+import BucketItem from "../components/BucketItem";
 
 const BucketDetail =(props)=>{
     const history = useHistory();
     const bucket_list = useSelector((state)=>state.bucket.list)
+    console.log(bucket_list[0].todo);
     const userInfo = useSelector((state) => state.user.userInfo)
     const comment = useSelector((state)=> state.comment.list)
   
@@ -27,42 +29,24 @@ const BucketDetail =(props)=>{
    
   }, [dispatch,params.id]);
 
-
-    //console.log(bucket_list)
-    //const bucketList = bucket_list[0].todo
-
     const editWrite = () => {
         history.push(`/editB/${bucket_list[0].postId}`)
       
     }
-
-    //댓글입력 인풋
     const [comments,setComments] = React.useState();
     const comment_cont = (e) =>{
         setComments(e.target.value);
     }
-     
-
-
-    //댓글작성 버튼
+ 
     const comment_send = () => {
       dispatch(commentAction.setCommentDB({comments:comments, Id : params.id, userInfo, imageUrl:bucket_list[0].imageUrl}))
       //console.log(comments, userInfo)
     }
+    const [checkState, setCheckState] = React.useState(false);
 
-
-    
-  const [checkState, setCheckState] = React.useState(false);
-
-  //버튼함수
-  const complete=()=>{
-    // const bucket_idx = bucket_list.findIndex(p=>p.id === id); // 인덱스번호를 찾는다.
-    // const bucket = bucket_list[bucket_idx];
-    // const bucketDone = bucket.todolist
-    //dispatch(bucketAction.PG_updateBucket(bucket))
-
-
+    const complete=()=>{
     checkState===true? setCheckState(false):setCheckState(true)
+    
   }
 
     return(
@@ -78,7 +62,7 @@ const BucketDetail =(props)=>{
                   {
                   bucket_list.map((a,i) => {
                       return(
-                              <div style={{marginTop:"10px"}}>
+                              <div style={{marginTop:"10px"}} key={i}>
                               <Box checkState={checkState} onClick={complete}>
                                 <Text>{a.todo[i].content}</Text>
                                 <div>{checkState? "🗹":"☐"}</div>
