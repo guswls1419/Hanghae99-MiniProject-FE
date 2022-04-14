@@ -11,10 +11,10 @@ import { actionCreators as commentAction } from "../redux/modules/comment";
 const BucketDetail =(props)=>{
     const history = useHistory();
     const bucket_list = useSelector((state)=>state.bucket.list)
+
     const userInfo = useSelector((state) => state.user.userInfo)
     const comment = useSelector((state)=> state.comment.list)
   
-
    const dispatch = useDispatch();
   const user_token = localStorage.getItem("user_token") ? true : false;
   const params = useParams();
