@@ -13,13 +13,15 @@ const Header =(props)=>{
    }
    const nickname=useSelector((state)=>state.user.userInfo.nickname)
    const is_login =useSelector((state)=>state.user.is_login)
+   console.log(nickname);
+   console.log(is_login);
    const is_session =sessionStorage.getItem("token")? true : false;
     const isPc = useMediaQuery ({
         query : "(min-width : 1024px) and (max-width :1920px)"
         });
-const logout=()=>{
-    console.log("로그아웃 누름")
-    dispatch(userAction.logOutDB);
+    const logout=()=>{
+        console.log("로그아웃 누름")
+        dispatch(userAction.logOutDB);
 }
 if(is_login && is_session){
             return( 

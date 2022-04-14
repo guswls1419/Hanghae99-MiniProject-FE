@@ -11,10 +11,7 @@ const Post =(props)=>{
     const dispatch = useDispatch();
     const history = useHistory();
 
-//     React.useEffect(()=>{
-//     dispatch(BucketAction.LodeBucketDB());
-//   },[]);
-//console.log(props.imageUrl)
+
     return(
         <React.Fragment>
                 <Box onClick={()=>{

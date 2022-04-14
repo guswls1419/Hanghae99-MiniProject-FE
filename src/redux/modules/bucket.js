@@ -5,7 +5,6 @@ import axios from 'axios';
 
 // *** 액션 타입
 const CREATE_BUCKET = "CREATE_BUCKET";
-//const ADD_BUCKET = "ADD_BUCKET";
 const LODE_BUCKET = "LODE_BUCKET";
 const GET_BUCKET = "GET_BUCKET";
 const UPLODE_BUCKET = "UPLODE_BUCKET";
@@ -34,8 +33,10 @@ const LodeBucketDB = (page=1,size=8) => {
       return;
     }
     dispatch(loading(true));
+    const token = sessionStorage.getItem("token");
     await axios
-        .get(`http://denia-wwdt.shop/api/postsWithPage?page=${page}&size=8&sortBy=id&isAsc=true`)
+        .get(`http://spt-prac.shop/api/postsWithPage?page=${page}&size=8&sortBy=id&isAsc=true`,{
+          headers: { Authorization: token },})
         .then((result) => {
           console.log(result);
           let paging={

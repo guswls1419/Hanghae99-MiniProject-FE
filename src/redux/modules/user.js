@@ -64,8 +64,6 @@ const NickDupCheck=(nick_name)=>{
   }
 }
 
-
-
 const signupDB = (user_name, pwd,nick_name,pwd_check) => {
   return function (dispatch, getState, {history}){
     axios
@@ -156,7 +154,6 @@ const logOutDB =(dispatch,getState,{history})=>{
   history.replace('/login');
 }
 
-
 //4)리듀서 만든다(feat.immer)
 export default handleActions(
     {
@@ -166,16 +163,11 @@ export default handleActions(
             draft.userInfo = action.payload.user
             draft.is_login=true;
         }),
-        // [ID_DUP_CHECK]:(state,action)=>
-        // produce(state,(draft)=>{
-        //   console.log(draft)
-        //     draft.isIdDupChecked=true;
-        // }),
 
         [LOG_OUT]:(state,action)=>
         produce(state,(draft)=>{
-            deleteCookie("is_login");
-           draft.user=null;
+          deleteCookie("is_login");
+           draft.userInfo=null;
            draft.is_login=false;
         }),
         [GET_USER]:(state,action)=>

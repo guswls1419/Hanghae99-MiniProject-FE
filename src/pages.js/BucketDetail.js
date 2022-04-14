@@ -1,19 +1,16 @@
 import React from "react";
 import styled from "styled-components";
 import {Grid,Text,Input,Button} from "../elements";
-import BuckItem from "../components/BucketItem";
 import ProgressBar from "../components/ProgressBar";
 import CommentItem from "../components/CommentItem";
 import { useHistory, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import bucket, { actionCreators as bucketAction } from "../redux/modules/bucket";
+import { actionCreators as bucketAction } from "../redux/modules/bucket";
 import { actionCreators as commentAction } from "../redux/modules/comment";
-import BucketItem from "../components/BucketItem";
 
 const BucketDetail =(props)=>{
     const history = useHistory();
     const bucket_list = useSelector((state)=>state.bucket.list)
-    console.log(bucket_list[0].todo);
     const userInfo = useSelector((state) => state.user.userInfo)
     const dispatch = useDispatch();
     const user_token = localStorage.getItem("user_token") ? true : false;
@@ -35,13 +32,11 @@ const BucketDetail =(props)=>{
  
     const comment_send = () => {
       dispatch(commentAction.setCommentDB(comments, userInfo))
-      //console.log(comments, userInfo)
     }
     const [checkState, setCheckState] = React.useState(false);
-
     const complete=()=>{
     checkState===true? setCheckState(false):setCheckState(true)
-    
+  
   }
 
     return(
@@ -63,7 +58,6 @@ const BucketDetail =(props)=>{
                                 <div>{checkState? "🗹":"☐"}</div>
                               </Box>
                               </div>
-                          // <BuckItem key={idx} {...a}/>
                         )
                     })
                   } 
