@@ -151,7 +151,8 @@ const logOutDB =(dispatch,getState,{history})=>{
   dispatch(logOut());
   const token = sessionStorage.getItem("token");
   delToken(token);
-  history.replace('/login');
+  history.replace('/');
+  window.location.reload();
 }
 
 //4)리듀서 만든다(feat.immer)
