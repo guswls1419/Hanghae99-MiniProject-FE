@@ -97,7 +97,6 @@ const loginCheckDB = () => {
       },
     })
     .then((res) => {
-      console.log(res)
         dispatch(setUser({
           username:res.data.username,
           nickname:res.data.nickname.split("_")[1]

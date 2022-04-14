@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 const ProgressBar=(props)=>{
 
     const bucket_list = useSelector((state) => state.bucket.list);
-   // console.log(bucket_list)
     let count = 0;
         bucket_list.map((b, idx) => {
         if (b.done === 1 ) {
@@ -17,7 +16,7 @@ const ProgressBar=(props)=>{
 
         });
 
-        //console.log(count);
+        console.log(count);
 
     return(
         <ProgressBack>
@@ -26,9 +25,7 @@ const ProgressBar=(props)=>{
         </ProgressBack>
     )
 }
-const RedDiv =styled.div`
 
-`
 const ProgressBack=styled.div`
     width:100%;
     height:15px;

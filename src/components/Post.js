@@ -4,29 +4,28 @@ import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import {actionCreators as BucketAction} from "../redux/modules/bucket";
 import { useHistory } from "react-router-dom";
+import {useSelector} from "react-redux";
 
 const Post =(props)=>{
+    const bucket_list=useSelector((state)=>state.bucket.list)
     const dispatch = useDispatch();
     const history = useHistory();
 
 //     React.useEffect(()=>{
 //     dispatch(BucketAction.LodeBucketDB());
 //   },[]);
-
-  
- 
-
 //console.log(props.imageUrl)
     return(
         <React.Fragment>
                 <Box onClick={()=>{
-                  history.push(`/bucket/${props.postId}`)
+                  history.push(`/bucket/${props.post_id}`)
+                  window.location.reload();
                 }}>
                   <Grid padding="20px">
                           <Grid>
                               <div style={{float:"right", display:"flex"}}>
-                                  <div>🖤{props.likesNum}</div>
-                                  <div>💬{props.commentsNum}</div>
+                                  <div>🖤{props.like_cnt}</div>
+                                  <div>💬{props.comment_cnt}</div>
                               </div>
                           </Grid>
                           <Grid margin="220px 0px 0px 0px">
@@ -59,7 +58,6 @@ const Box=styled.div`
 border-radius:10px;
 min-width:270px;
 width:280px;
-background-image:url(props.imageUrl);
 height:350px;
 margin:10px;
 box-shadow:
