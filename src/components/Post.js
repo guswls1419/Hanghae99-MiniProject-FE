@@ -11,7 +11,6 @@ const Post =(props)=>{
     const bucket_list=useSelector((state)=>state.bucket.list)
     const dispatch = useDispatch();
     const history = useHistory();
-console.log(props.imageUrl)
     return(
         <React.Fragment>
                 <Box style = {{backgroundImage:`url(${props.image_url})`,
