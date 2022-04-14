@@ -8,12 +8,9 @@ const ProgressBar=(props)=>{
    // console.log(bucket_list)
     let count = 0;
         bucket_list.map((b, idx) => {
-        if (b.done === 1 ) {
+        if (b.done === true ) {
          count ++;
         }
-        if (b.done === 0 ) {
-            count --;
-           }
 
         });
 

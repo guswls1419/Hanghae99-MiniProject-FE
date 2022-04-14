@@ -13,12 +13,14 @@ const BucketDetail =(props)=>{
     const history = useHistory();
     const bucket_list = useSelector((state)=>state.bucket.list)
     const userInfo = useSelector((state) => state.user.userInfo)
+    const comment = useSelector((state)=> state.comment.list)
+  
 
-    
    const dispatch = useDispatch();
   const user_token = localStorage.getItem("user_token") ? true : false;
   const params = useParams();
-  console.log(params.id)
+  //const imgUrl = bucket_list[0].imageUrl
+  //console.log(params.id)
 
   React.useEffect(() => {
     dispatch(bucketAction.getBucketDB(params.id));
@@ -26,11 +28,12 @@ const BucketDetail =(props)=>{
   }, [dispatch,params.id]);
 
 
-    console.log(bucket_list)
+    //console.log(bucket_list)
     //const bucketList = bucket_list[0].todo
 
     const editWrite = () => {
-        history.push('/write')
+        history.push(`/editB/${bucket_list[0].postId}`)
+      
     }
 
     //댓글입력 인풋
@@ -43,7 +46,7 @@ const BucketDetail =(props)=>{
 
     //댓글작성 버튼
     const comment_send = () => {
-      dispatch(commentAction.setCommentDB(comments, userInfo))
+      dispatch(commentAction.setCommentDB({comments:comments, Id : params.id, userInfo, imageUrl:bucket_list[0].imageUrl}))
       //console.log(comments, userInfo)
     }
 
@@ -68,7 +71,7 @@ const BucketDetail =(props)=>{
             <Grid margin="80px 0px 30px 0px">
                 <Text bold>김버킷의 버킷리스트</Text>
                 <Grid margin="30px 0px 0px 0px">
-                <ProgressBar/>
+                {/* <ProgressBar/> */}
             </Grid>
             </Grid>
                 <Grid margin="80px 0px 0px 0px">
@@ -81,7 +84,6 @@ const BucketDetail =(props)=>{
                                 <div>{checkState? "🗹":"☐"}</div>
                               </Box>
                               </div>
-                          // <BuckItem key={idx} {...a}/>
                         )
                     })
                   } 
@@ -98,10 +100,11 @@ const BucketDetail =(props)=>{
                     {/* _onClick={comment_send} */}
                 </Grid>
                 <Grid  margin="20px 0px 0px 0px">
-                  {
-
-                  }
-                    <CommentItem />
+                 <CommentItem postId={params.id} />
+                <CommentItem postId={params.id} />
+                <CommentItem postId={params.id} />
+                <CommentItem postId={params.id} />
+                <CommentItem postId={params.id} />
                     <Grid margin="40px 0px 0px 0px"/>
                   {/* 밑의 버튼이랑 사이 간격이니 꼭 유지해주세요 */}
                 </Grid> 

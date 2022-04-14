@@ -11,34 +11,38 @@ const DELETE_COMMENT = "DELETE_COMMENT";
 const GET_COMMENT = "GET_COMMENT";
 
 
-
-const setComment = createAction(SET_COMMENT, (comment,userInfo) => ({comment,userInfo}));
+const setComment = createAction(SET_COMMENT, (comment_list) => ({comment_list}));
 const addComment = createAction(ADD_COMMENT, (commentId, comment) => ({commentId, comment}));
-const getComment = createAction(GET_COMMENT, (commentId, comment) => ({commentId, comment}));
+const getComment = createAction(GET_COMMENT, (postId,commentsList) => ({postId,commentsList}));
 const deleteComment = createAction(DELETE_COMMENT, (commentId,postId) => ({commentId,postId}));
 
-const initialState =  {list:{
-  id : null,
-  comment: null, 
-  username: null,
-  createdAt: null,
-  editCheck : false
-}}
+const initialState =  {list:[{
+  Id: "",
+comments: "",
+imageUrl: "",
+userInfo:{
+nickname: "",
+username: ""}
+}]}
 
 
 
 //댓글작성 미들웨어
-const setCommentDB = (comment,userInfo) => {
+const setCommentDB = (comment_list) => {
+  console.log(comment_list)
     return async function (dispatch, getState, { history }) {
       const token = sessionStorage.getItem("token");
     //   const postId = getState().bucket.list[0].id;
-    console.log(userInfo)
-
+   // console.log(comment_list)
+      const postId = comment_list.Id
+      const comment = comment_list.comments
+      const username = comment_list.userInfo.username
+      //console.log(postId,comment,username)
      await axios
-        .post("http://spt-prac.shop/api/post/22/comment",
+        .post(`http://spt-prac.shop/api/post/${postId}/comment`,
           {
             "comment" : comment,
-            "username" :userInfo.username
+            "username" :username
           },
           {
            headers: {
@@ -48,7 +52,7 @@ const setCommentDB = (comment,userInfo) => {
         )
 
         .then((res) => {
-          dispatch(setComment(comment,userInfo.username))
+          dispatch(setComment(comment_list))
         })
         .catch((err) => {
             console.log("댓글 작성 실패", err);
@@ -58,42 +62,51 @@ const setCommentDB = (comment,userInfo) => {
   }
 
 //댓글삭제
-// const deleteCommentDB = (comment_id,bucket_id) => {
-//     return async function (dispatch, getState, { history }) {
-//       await axios
-//         .delete("", {
-//         //   headers: {
-//         //     Authorization: cookie,
-//         //   },
-//         })
-//         .then((res) => {
-//           dispatch(deleteComment(comment_id,bucket_id))
-//         })
-//         .catch((err) => {
-//         console.log("댓글 삭제 실패", err);
-//         });
-//         history.push('/')
-//     }
-//   }
-
-const getCommentDB = () => {
+const deleteCommentDB = (postId,commentId) => {
     return async function (dispatch, getState, { history }) {
+      const token = sessionStorage.getItem("token");
+      const postIds = parseInt(postId);
+      const commentIds = parseInt(commentId);
+
+      await axios
+        .delete(`http://spt-prac.shop/api/post/${postIds}/${commentIds}`, {
+          headers: {
+            "Authorization": `${token}`, 
+          },
+        })
+        .then((res) => {
+          dispatch(deleteComment(postId,commentId))
+        })
+        .catch((err) => {
+        console.log("댓글 삭제 실패", err);
+        });
+//        history.push('/')
+    }
+  }
+
+const getCommentDB = (postId) => {
+    return async function (dispatch, getState, { history }) {
+      console.log(postId)
        await axios
-       .get("http://localhost:3001/comment_list")
-       .then((result) => {
-        dispatch(getComment(result.data))
+       .get(`http://spt-prac.shop/api/post/${postId}`)
+       .then((response) => {
+        const commentsList = response.data.comment_list
+        console.log(commentsList)
+        dispatch(getComment(commentsList,postId))
       })
       .catch((err) => {
-        console.log("댓글작성 실패", err);
+        console.log("댓글불러오기 실패", err);
       });
     }
 }
 
+
+
 export default handleActions(
   {
       [SET_COMMENT]: (state, action) => produce(state, (draft) => {
-        console.log(action.payload.postId)
-        draft[action.payload.postId] = action.payload.comment;
+       console.log(state,action)
+       draft.list=draft.list.push(action.payload.comment_list);
         
       }),
       [ADD_COMMENT]: (state, action) => produce(state, (draft) => {
@@ -105,10 +118,12 @@ export default handleActions(
         let idx = draft.list.findIndex(
         (p) => p.commentId === action.payload.commentId
         );
-        draft.list.splice(idx, 1); //삭제할 게시글의 index를 찾아서 splice로 지운다.
+        draft.list.splice(idx, 1); 
         }),
+
       [GET_COMMENT]: (state, action) => produce(state, (draft) => {
-        draft.list[action.payload.commentId] = action.payload.comment_list
+        draft.list= action.payload.comment
+        console.log(state, action)
       })
     },
         initialState
@@ -120,7 +135,7 @@ const actionCreators = {
   setComment,
   addComment,
  deleteComment,
-//deleteCommentDB,
+deleteCommentDB,
 getCommentDB,
 getComment
 };
